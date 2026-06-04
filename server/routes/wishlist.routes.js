@@ -14,6 +14,7 @@ router.use(authMiddleware)
 router.get('/', getWishlist)
 
 router.post('/add/:productId', addToWishlist)
+router.post('/move-to-cart', moveToCart)
 
 router.delete('/remove/:productId', removeFromWishlist)
 
