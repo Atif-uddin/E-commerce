@@ -10,7 +10,7 @@ router.get('/',(req, res)=>{
 })
 
 //register& login
-router.post('/register',registerUserMiddleware,registerUser)
+router.post('/register',registerMiddleware,registerUser)
 router.post('/verify-email', verifyEmailMiddleware, verifyEmail)
 router.post('/login',userLoginMiddleware, userLogin)
 
