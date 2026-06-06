@@ -1,12 +1,11 @@
 import { createUser, findUserByEmail } from "../services/user.service.js";
 import { validateRegistrationOtp } from "../services/auth.service.js";
-import { email, success } from "zod";
 import { generateOtp } from "../utils/otp.js";
 import { sendOtp } from "../services/email.service.js";
 
 
 export const registerUser = async (req, res) => {
-    const { fullname, email, password, phoneNumber } = req.user
+    const { fullname, email, password, phoneNumber } = req.validatedData
     try {
         const user = await createUser({ fullname, email, password, phoneNumber })
         return res.status(200).send({
@@ -25,27 +24,13 @@ export const registerUser = async (req, res) => {
 
 export const verifyEmail = async (req, res) => {
 
-    const { email, otp } = req.user || {}
+    const { email, otp } = req.validatedData || {}
     // console.log(email, otp);
     // console.log(otp, typeof otp);
     
     console.log(req.user);
     console.log('test');
     
-    
-
-    if (!email) {
-        return res.status(400).send({
-            success: false,
-            message: 'Email is required'
-        })
-    }
-    if (!otp) {
-        return res.status(400).send({
-            success: false,
-            message: 'OTP is required'
-        })
-    }
 
     try {
         const {success, message} = await validateRegistrationOtp(email, otp)
@@ -71,13 +56,8 @@ export const verifyEmail = async (req, res) => {
 }
 
 export const resendOtp = async(req, res) =>{
-    const {email} = req.body || {}
-    if(!email){
-        return res.status(400).send({
-            success: false,
-            message: 'Email is required!'
-        })
-    }
+    const {email} = req.validatedData || {}
+   
     try {
         const user = await findUserByEmail(email)
 

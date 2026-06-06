@@ -1,6 +1,8 @@
 import express from 'express'
 import { registerMiddleware, verifyEmailMiddleware } from '../middlewares/authMiddleware.js'
 import { registerUser, resendOtp, verifyEmail } from '../controllers/auth.controller.js'
+import { validate } from '../middlewares/validate.middleware.js'
+import { registerSchema, resendOtpSchema, verifyEmailSchema } from '../validators/auth.validator.js'
 
 const userRouter = express.Router()
 
@@ -12,9 +14,9 @@ userRouter.get('/', (req, res) => {
 })
 
 //register& login
-userRouter.post('/register', registerMiddleware, registerUser)
-userRouter.post('/register/resend-otp', resendOtp)
-userRouter.post('/verify-email', verifyEmailMiddleware, verifyEmail)
+userRouter.post('/register',validate(registerSchema), registerMiddleware, registerUser)
+userRouter.post('/register/resend-otp',validate(resendOtpSchema), resendOtp)
+userRouter.post('/verify-email',validate(verifyEmailSchema), verifyEmailMiddleware, verifyEmail)
 // router.post('/login',userLoginMiddleware, userLogin)
 
 //Middleware

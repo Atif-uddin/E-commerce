@@ -4,36 +4,10 @@ import { findUserByEmail, findUserByEmailAndDelete } from "../services/user.serv
 // console.log('hello');
 
 
-export const validateRegisterMiddleware = async({fullname, email, password, phoneNumber}) =>{
-    const errors = {}
-    if(!fullname){
-        errors.fullname = 'fullname is required!'
-    }
-    if(!email){
-        errors.email = 'Email is required!'
-    }
-    if(!password){
-        errors.password = 'password is required!'
-    }
-    if(!phoneNumber){
-        errors.phoneNumber = 'phone number is required'
-    }
-    return errors
-}
-
-
 export const registerMiddleware = async(req, res, next)=>{
     
     try {
-      const {fullname, email, password, phoneNumber} = req.body || {}
-      const errors = await validateRegisterMiddleware({fullname, email, password, phoneNumber})  
-      if(Object.keys(errors).length > 0){
-        return res.status(404).send({
-            success: false,
-            message: 'Please fill the details first',
-            errors
-        })
-      }
+      const {fullname, email, password, phoneNumber} = req.validatedData || {}
 
       const existingUser = await findUserByEmail(email)
       console.log(existingUser);
@@ -55,12 +29,6 @@ export const registerMiddleware = async(req, res, next)=>{
         await findUserByEmailAndDelete(email)
       }
 
-      req.user = {
-        fullname,
-        email,
-        password,
-        phoneNumber
-      }
       next()
       
     } catch (error) {
@@ -74,22 +42,9 @@ export const registerMiddleware = async(req, res, next)=>{
 
 export const verifyEmailMiddleware = async(req, res, next)=>{
     try {
-        const {email, otp} = req.body || {}
+        const {email, otp} = req.validatedData || {}
         // console.log('test1');
         console.log(email, otp);
-        
-        if(!email){
-            return res.status(400).send({
-                success: false,
-                message: 'Email is required !'
-            })
-        }
-        if(!otp){
-            return res.status(400).send({
-                success: false,
-                message: 'OTP is required ! '
-            })
-        }
         
         const user = await findUserByEmail(email)
         console.log(user);
@@ -114,8 +69,7 @@ export const verifyEmailMiddleware = async(req, res, next)=>{
         //         message: 'User not verified or registered yet'
         //     })
         // }
-        req.user = user
-        req.user.otp = otp
+        
         next()
 
     } catch (error) {
