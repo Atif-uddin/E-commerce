@@ -1,5 +1,5 @@
 import express from 'express'
-import { registerMiddleware, userLoginMiddleware, verifyEmailMiddleware } from '../middlewares/authMiddleware.js'
+import { authMiddleware, registerMiddleware, userLoginMiddleware, verifyEmailMiddleware } from '../middlewares/authMiddleware.js'
 import { registerUser, resendOtp, userLogin, verifyEmail } from '../controllers/auth.controller.js'
 import { validate } from '../middlewares/validate.middleware.js'
 import { loginSchema, registerSchema, resendOtpSchema, verifyEmailSchema } from '../validators/auth.validator.js'
@@ -20,7 +20,7 @@ userRouter.post('/verify-email',validate(verifyEmailSchema), verifyEmailMiddlewa
 userRouter.post('/login',validate(loginSchema),userLoginMiddleware, userLogin)
 
 //Middleware
-// router.use(authMiddleware)
+userRouter.use(authMiddleware)
 
 //user info
 // router.get('/details',getUserDetails)

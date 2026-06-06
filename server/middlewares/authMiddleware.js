@@ -1,5 +1,7 @@
-import { findUserByEmail, findUserByEmailAndDelete } from "../services/user.service.js"
+import { findUserByEmail, findUserByEmailAndDelete, findUserById } from "../services/user.service.js"
 import { validatePassword } from "../services/auth.service.js";
+import { success } from "zod";
+import { validateJWTToken } from "../utils/jwt.js";
 
 
 // console.log('hello');
@@ -90,7 +92,7 @@ export const userLoginMiddleware = async(req, res, next) =>{
         if(!user){
             return res.status(400).send({
                 success: false,
-                message: 'User not Found'
+                message: 'User not Found || Email is not Valid'
             })
         }
 
@@ -103,6 +105,38 @@ export const userLoginMiddleware = async(req, res, next) =>{
         }
         next()
 
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: 'Internal server Error'
+        })
+    }
+}
+
+export const authMiddleware = async(req, res, next) =>{
+    try {
+        const token = req.cookies.token
+        if(!token){
+            return res.status(400).send({
+                success: false,
+                message: 'Unauthorized!'
+            })
+        }
+
+        const id = await validateJWTToken(token)
+
+        const user = await findUserById(id)
+        if(!id){
+            return res.status(400).send({
+                success: false,
+                message: 'Unauthorized!'
+            })
+        }
+
+        req.user = user
+        next()
+        
     } catch (error) {
         console.log(error);
         return res.status(500).send({
