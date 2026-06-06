@@ -1,6 +1,6 @@
 import express from 'express'
 import { registerMiddleware, verifyEmailMiddleware } from '../middlewares/authMiddleware.js'
-import { registerUser, verifyEmail } from '../controllers/auth.controller.js'
+import { registerUser, resendOtp, verifyEmail } from '../controllers/auth.controller.js'
 
 const userRouter = express.Router()
 
@@ -13,6 +13,7 @@ userRouter.get('/', (req, res) => {
 
 //register& login
 userRouter.post('/register', registerMiddleware, registerUser)
+userRouter.post('/register/resend-otp', resendOtp)
 userRouter.post('/verify-email', verifyEmailMiddleware, verifyEmail)
 // router.post('/login',userLoginMiddleware, userLogin)
 
