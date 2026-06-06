@@ -3,19 +3,23 @@ import {hashPassword} from '../utils/bcrypt.js'
 import { generateOtp } from '../utils/otp.js'
 import { sendOtp } from './email.service.js'
 
-export const createUser = async({fullname, email, password})=>{
+export const createUser = async({fullname, email, password, phoneNumber})=>{
     password = await hashPassword(password, 12)
-    const user = new User({fullname, email, password})
+    const user = new User({fullname, email, password, phoneNumber})
     user.authTokens.userRegistration.otp = generateOtp()
-    user.authTokens.userRegistration.expires = new Date(Date.now() + 2 * 60 * 1000).toISOString()
+    user.authTokens.userRegistration.expires = new Date(Date.now() + 1 * 60 * 1000).toISOString()
     await user.save()
 
-    await sendOtp(user.authTokens.userRegistration.otp)
+    await sendOtp(
+        user.email,
+        user.authTokens.userRegistration.otp
+    )
     return user
 }
 
 export const findUserByEmail = async(email)=>{
-    const user = await User.findOne({email}).select('-password -authtokens -__v')
+    const user = await User.findOne({email}).select('-password -authTokens -__v')
+    // console.log(user);
     return user
 }
 

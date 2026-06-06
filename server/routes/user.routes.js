@@ -1,8 +1,10 @@
 import express from 'express'
+import { registerMiddleware, verifyEmailMiddleware } from '../middlewares/authMiddleware.js'
+import { registerUser, verifyEmail } from '../controllers/auth.controller.js'
 
-const router = express.Router()
+const userRouter = express.Router()
 
-router.get('/',(req, res)=>{
+userRouter.get('/', (req, res) => {
     return res.send({
         success: true,
         message: 'User router is working'
@@ -10,23 +12,25 @@ router.get('/',(req, res)=>{
 })
 
 //register& login
-router.post('/register',registerMiddleware,registerUser)
-router.post('/verify-email', verifyEmailMiddleware, verifyEmail)
-router.post('/login',userLoginMiddleware, userLogin)
+userRouter.post('/register', registerMiddleware, registerUser)
+userRouter.post('/verify-email', verifyEmailMiddleware, verifyEmail)
+// router.post('/login',userLoginMiddleware, userLogin)
 
 //Middleware
-router.use(authMiddleware)
+// router.use(authMiddleware)
 
 //user info
-router.get('/details',getUserDetails)
-router.put('/update',updateUserMiddleware,updateUserDetails)
-router.delete('/delete',deleteUser)
+// router.get('/details',getUserDetails)
+// router.put('/update',updateUserMiddleware,updateUserDetails)
+// router.delete('/delete',deleteUser)
 
-router.post('/logout', userLogout)
+// router.post('/logout', userLogout)
 
-router.use((req, res)=>{
+userRouter.use((req, res) => {
     return res.status(404).send({
         success: false,
         message: 'Route not Found'
     })
 })
+
+export default userRouter
