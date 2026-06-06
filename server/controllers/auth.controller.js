@@ -2,6 +2,8 @@ import { createUser, findUserByEmail } from "../services/user.service.js";
 import { validateRegistrationOtp } from "../services/auth.service.js";
 import { generateOtp } from "../utils/otp.js";
 import { sendOtp } from "../services/email.service.js";
+import { generateJwtToken } from "../utils/jwt.js";
+import { cookieConfig } from "../config/cookie.config.js";
 
 
 export const registerUser = async (req, res) => {
@@ -89,4 +91,16 @@ export const resendOtp = async(req, res) =>{
             message: 'Internal server Error'
         })
     }
+}
+
+export const userLogin = async(req, res) =>{
+    const user = req.validatedData
+    const token = await generateJwtToken(user._id)
+
+    res.cookie('token', token, cookieConfig)
+    return res.status(201).send({
+        success: true,
+        message: 'Login Successful!',
+        data: user
+    })
 }

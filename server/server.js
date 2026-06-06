@@ -1,7 +1,8 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import dbConnect from './utils/dbConnect.js'
 import cors from 'cors'
+import dbConnect from './config/mongo.config.js'
+import cookieParser from 'cookie-parser'
 import userRouter from './routes/user.routes.js'
 
 dotenv.config()
@@ -9,6 +10,8 @@ dotenv.config()
 const PORT = process.env.PORT
 
 const server = express()
+
+server.use(cookieParser())
 server.use(express.json())
 
 server.use('/api/users',userRouter)

@@ -1,4 +1,5 @@
 import { findUserByEmail, findUserByEmailAndDelete } from "../services/user.service.js"
+import { validatePassword } from "../services/auth.service.js";
 
 
 // console.log('hello');
@@ -70,6 +71,36 @@ export const verifyEmailMiddleware = async(req, res, next)=>{
         //     })
         // }
         
+        next()
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: 'Internal server Error'
+        })
+    }
+}
+
+export const userLoginMiddleware = async(req, res, next) =>{
+    try {
+        const {email, password} = req.validatedData || {}
+
+        const user = await findUserByEmail(email)
+        if(!user){
+            return res.status(400).send({
+                success: false,
+                message: 'User not Found'
+            })
+        }
+
+        const isValid = await validatePassword(user._id, password)
+        if(!isValid){
+            return res.status(400).send({
+                success: false,
+                message: 'Invalid Credentials'
+            })
+        }
         next()
 
     } catch (error) {

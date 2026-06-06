@@ -17,7 +17,7 @@ export const verifyEmailSchema = z.object({
 //LoginSchema
 export const loginSchema = z.object({
     email: z.email('Ivalid Email'),
-    password: z.string().min(8)
+    password: z.string().min(8, "Password must be 8 digits")
 })
 
 //resendOtpSchema
