@@ -1,9 +1,10 @@
 import { createUser, findUserByEmail } from "../services/user.service.js";
-import { validateRegistrationOtp } from "../services/auth.service.js";
+import { generateResetPasswordOtp, validateRegistrationOtp } from "../services/auth.service.js";
 import { generateOtp } from "../utils/otp.js";
 import { sendOtp } from "../services/email.service.js";
 import { generateJwtToken } from "../utils/jwt.js";
 import { cookieConfig } from "../config/cookie.config.js";
+import { success } from "zod";
 
 
 export const registerUser = async (req, res) => {
@@ -103,4 +104,23 @@ export const userLogin = async(req, res) =>{
         message: 'Login Successful!',
         data: user
     })
+}
+
+export const forgotPassword = async(req, res) =>{
+    try {
+        const {email} = req.validatedData 
+        console.log(email);
+        
+        await generateResetPasswordOtp()
+        return res.status(201).send({
+            success: true,
+            message: 'OTP sent Successfully!'
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: 'Internal server Error'
+        })
+    }
 }

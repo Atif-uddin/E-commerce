@@ -1,4 +1,4 @@
-import {z} from 'zod'
+import {email, z} from 'zod'
 
 //registerSchema
 export const registerSchema = z.object({
@@ -23,4 +23,9 @@ export const loginSchema = z.object({
 //resendOtpSchema
 export const resendOtpSchema = z.object({
     email: z.email('Invalid Email')
+})
+
+//forgotPasswordSchema
+export const forgotPasswordSchema = z.object({
+    email: z.email('Invalid Email address')
 })

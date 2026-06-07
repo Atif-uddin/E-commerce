@@ -1,5 +1,8 @@
+import { email } from "zod"
 import User from "../models/user.js"
 import { comparePassword } from "../utils/bcrypt.js"
+import { generateOtp } from "../utils/otp.js"
+import { sendOtp } from "./email.service.js"
 
 
 
@@ -23,8 +26,8 @@ export const validateRegistrationOtp = async(email, otp) =>{
                 }
             }
             user.status = 'active'
-            user.authTokens.userRegistration.otp == null
-            user.authTokens.userRegistration.expires == null
+            user.authTokens.userRegistration.otp = null
+            user.authTokens.userRegistration.expires = null
             await user.save()
             return{
                 success: true,
@@ -47,4 +50,20 @@ export const validateRegistrationOtp = async(email, otp) =>{
             message: 'User not Found!'
         }
     }
+}
+
+export const generateResetPasswordOtp = async(email) =>{
+    const user = await User.findOne(email)
+    console.log(user);
+    
+
+    user.authTokens.passwordReset.otp = generateOtp()
+    console.log(user);
+    
+    user.authTokens.passwordReset.expires = new Date(Date.now()+ 2 * 60 * 1000).toISOString()
+
+    await user.save()
+
+    await sendOtp(user.email, user.authTokens.passwordReset.otp)
+    return user
 }

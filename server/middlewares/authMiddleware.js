@@ -1,7 +1,7 @@
 import { findUserByEmail, findUserByEmailAndDelete, findUserById } from "../services/user.service.js"
 import { validatePassword } from "../services/auth.service.js";
-import { success } from "zod";
 import { validateJWTToken } from "../utils/jwt.js";
+import { success } from "zod";
 
 
 // console.log('hello');
@@ -101,6 +101,36 @@ export const userLoginMiddleware = async(req, res, next) =>{
             return res.status(400).send({
                 success: false,
                 message: 'Invalid Credentials'
+            })
+        }
+        next()
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: 'Internal server Error'
+        })
+    }
+}
+
+export const forgotPasswordMiddleware = async(req, res, next) =>{
+    try {
+        const {email} = req.validatedData || {}
+        // console.log(email);
+        
+        const user = await findUserByEmail(email)
+        
+        if(!user){
+            return res.status(400).send({
+                success: false,
+                message: 'User not Found!'
+            })
+        }
+        if(user.status != 'active'){
+            return res.status(400).send({
+                success: false,
+                message: 'User is not active'
             })
         }
         next()
