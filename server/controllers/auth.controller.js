@@ -1,5 +1,5 @@
 import { createUser, findUserByEmail } from "../services/user.service.js";
-import { generateResetPasswordOtp, validateRegistrationOtp } from "../services/auth.service.js";
+import { generateResetPasswordOtp, resetPasswordService, validateRegistrationOtp } from "../services/auth.service.js";
 import { generateOtp } from "../utils/otp.js";
 import { sendOtp } from "../services/email.service.js";
 import { generateJwtToken } from "../utils/jwt.js";
@@ -115,6 +115,27 @@ export const forgotPassword = async(req, res) =>{
         return res.status(201).send({
             success: true,
             message: 'OTP sent Successfully!'
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: 'Internal server Error'
+        })
+    }
+}
+
+export const resetPassword = async(req, res) =>{
+    try {
+        const {email, otp, password} = req.validatedData || {}
+
+        const result = await resetPasswordService({email, otp, password})
+        if(!result){
+            return res.status(400).send(result)
+        }
+        return res.status(200).send({
+            success: true,
+            message: 'Password reset Successfull!'
         })
     } catch (error) {
         console.log(error);

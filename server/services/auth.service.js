@@ -1,6 +1,6 @@
-import { email } from "zod"
+import { email, success } from "zod"
 import User from "../models/user.js"
-import { comparePassword } from "../utils/bcrypt.js"
+import { comparePassword, hashPassword } from "../utils/bcrypt.js"
 import { generateOtp } from "../utils/otp.js"
 import { sendOtp } from "./email.service.js"
 
@@ -66,4 +66,39 @@ export const generateResetPasswordOtp = async(email) =>{
 
     await sendOtp(user.email, user.authTokens.passwordReset.otp)
     return user
+}
+
+export const resetPasswordService = async({email, otp, password}) =>{
+    const user = await User.findOne({email})
+
+    if(!user){
+        return {
+            success: false,
+            message: 'User not found!'
+        }
+    }
+    if(user.authTokens.passwordReset.otp != otp){
+        return{
+            success: false,
+            message: 'Invalid OTP!'
+        }
+    }
+    const expiry = new Date(user.authTokens.passwordReset.expires).getTime()
+    if(Date.now() > expiry){
+        user.authTokens.passwordReset.otp = null
+        user.authTokens.passwordReset.expires = null
+
+        await user.save()
+
+        return{
+            success: false,
+            message: 'OTP Expired'
+        }
+    }
+    user.password = await hashPassword(password, 12)
+
+    user.authTokens.passwordReset.otp = null
+    user.authTokens.passwordReset.expires = null
+
+    await user.save()
 }

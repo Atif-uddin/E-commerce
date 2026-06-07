@@ -1,8 +1,8 @@
 import express from 'express'
-import { authMiddleware, forgotPasswordMiddleware, registerMiddleware, userLoginMiddleware, verifyEmailMiddleware } from '../middlewares/authMiddleware.js'
-import { forgotPassword, registerUser, resendOtp, userLogin, verifyEmail } from '../controllers/auth.controller.js'
+import { authMiddleware, forgotPasswordMiddleware, registerMiddleware, resetPasswordMiddleware, userLoginMiddleware, verifyEmailMiddleware } from '../middlewares/authMiddleware.js'
+import { forgotPassword, registerUser, resendOtp, resetPassword, userLogin, verifyEmail } from '../controllers/auth.controller.js'
 import { validate } from '../middlewares/validate.middleware.js'
-import { forgotPasswordSchema, loginSchema, registerSchema, resendOtpSchema, verifyEmailSchema } from '../validators/auth.validator.js'
+import { forgotPasswordSchema, loginSchema, registerSchema, resendOtpSchema, resetPasswordSchema, verifyEmailSchema } from '../validators/auth.validator.js'
 
 const userRouter = express.Router()
 
@@ -19,6 +19,7 @@ userRouter.post('/register/resend-otp',validate(resendOtpSchema), resendOtp)
 userRouter.post('/verify-email',validate(verifyEmailSchema), verifyEmailMiddleware, verifyEmail)
 userRouter.post('/login',validate(loginSchema),userLoginMiddleware, userLogin)
 userRouter.post('/forgot-password',validate(forgotPasswordSchema),forgotPasswordMiddleware, forgotPassword)
+userRouter.post('/reset-password',validate(resetPasswordSchema), resetPasswordMiddleware, resetPassword)
 
 //Middleware
 userRouter.use(authMiddleware)
