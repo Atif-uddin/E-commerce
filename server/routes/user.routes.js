@@ -3,6 +3,7 @@ import { authMiddleware, forgotPasswordMiddleware, registerMiddleware, resetPass
 import { forgotPassword, logoutUser, registerUser, resendOtp, resetPassword, userLogin, verifyEmail } from '../controllers/auth.controller.js'
 import { validate } from '../middlewares/validate.middleware.js'
 import { forgotPasswordSchema, loginSchema, registerSchema, resendOtpSchema, resetPasswordSchema, verifyEmailSchema } from '../validators/auth.validator.js'
+import { getUserDetails } from '../controllers/user.controller.js'
 
 const userRouter = express.Router()
 
@@ -25,7 +26,7 @@ userRouter.post('/reset-password',validate(resetPasswordSchema), resetPasswordMi
 userRouter.use(authMiddleware)
 
 //user info
-router.get('/details',getUserDetails)
+userRouter.get('/details',getUserDetails)
 // router.put('/update',updateUserMiddleware,updateUserDetails)
 // router.delete('/delete',deleteUser)
 
