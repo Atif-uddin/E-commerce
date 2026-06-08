@@ -26,6 +26,7 @@ export const validateRegistrationOtp = async(email, otp) =>{
                 }
             }
             user.status = 'active'
+            user.isVerified = true
             user.authTokens.userRegistration.otp = null
             user.authTokens.userRegistration.expires = null
             await user.save()

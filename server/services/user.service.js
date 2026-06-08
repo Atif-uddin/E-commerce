@@ -24,7 +24,7 @@ export const findUserByEmail = async(email)=>{
 }
 
 export const findUserById = async(id)=>{
-    const user = await User.findById(id).select('-password -authTokens -__v')
+    const user = await User.findById(id).select('-password -__v')
     return user
 }
 

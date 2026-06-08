@@ -1,6 +1,6 @@
 import express from 'express'
 import { authMiddleware, forgotPasswordMiddleware, registerMiddleware, resetPasswordMiddleware, userLoginMiddleware, verifyEmailMiddleware } from '../middlewares/authMiddleware.js'
-import { forgotPassword, registerUser, resendOtp, resetPassword, userLogin, verifyEmail } from '../controllers/auth.controller.js'
+import { forgotPassword, logoutUser, registerUser, resendOtp, resetPassword, userLogin, verifyEmail } from '../controllers/auth.controller.js'
 import { validate } from '../middlewares/validate.middleware.js'
 import { forgotPasswordSchema, loginSchema, registerSchema, resendOtpSchema, resetPasswordSchema, verifyEmailSchema } from '../validators/auth.validator.js'
 
@@ -25,11 +25,11 @@ userRouter.post('/reset-password',validate(resetPasswordSchema), resetPasswordMi
 userRouter.use(authMiddleware)
 
 //user info
-// router.get('/details',getUserDetails)
+router.get('/details',getUserDetails)
 // router.put('/update',updateUserMiddleware,updateUserDetails)
 // router.delete('/delete',deleteUser)
 
-// router.post('/logout', userLogout)
+userRouter.post('/logout', logoutUser)
 
 userRouter.use((req, res) => {
     return res.status(404).send({

@@ -95,8 +95,12 @@ export const resendOtp = async(req, res) =>{
 }
 
 export const userLogin = async(req, res) =>{
-    const user = req.validatedData
+    const user = req.user
+    console.log(user);
+    console.log(user._id);
+    
     const token = await generateJwtToken(user._id)
+    // console.log(token);
 
     res.cookie('token', token, cookieConfig)
     return res.status(201).send({
@@ -130,12 +134,29 @@ export const resetPassword = async(req, res) =>{
         const {email, otp, password} = req.validatedData || {}
 
         const result = await resetPasswordService({email, otp, password})
-        if(!result){
+        if(!result.success){
             return res.status(400).send(result)
         }
         return res.status(200).send({
             success: true,
             message: 'Password reset Successfull!'
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: 'Internal server Error'
+        })
+    }
+}
+
+export const logoutUser = async(req, res) =>{
+    try {
+        res.clearCookie('token')
+
+        return res.status(200).send({
+            success: true,
+            message: 'Logout successfully!'
         })
     } catch (error) {
         console.log(error);

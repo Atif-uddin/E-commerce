@@ -1,6 +1,7 @@
 import { findUserByEmail, findUserByEmailAndDelete, findUserById } from "../services/user.service.js"
 import { validatePassword } from "../services/auth.service.js";
 import { validateJWTToken } from "../utils/jwt.js";
+import { success } from "zod";
 
 
 // console.log('hello');
@@ -94,6 +95,18 @@ export const userLoginMiddleware = async(req, res, next) =>{
                 message: 'User not Found || Email is not Valid'
             })
         }
+        if(!user.isVerified){
+            return res.status(400).send({
+                success: false,
+                message: 'Please verify your email first'
+            })
+        }
+        if(user.status == 'inActive'){
+            return res.status(400).send({
+                success: false,
+                message: 'Account is inActive'
+            })
+        }
 
         const isValid = await validatePassword(user._id, password)
         if(!isValid){
@@ -102,6 +115,7 @@ export const userLoginMiddleware = async(req, res, next) =>{
                 message: 'Invalid Credentials'
             })
         }
+        req.user = user
         next()
 
     } catch (error) {
@@ -168,8 +182,12 @@ export const resetPasswordMiddleware = async(req, res, next) =>{
 export const authMiddleware = async(req, res, next) =>{
     try {
         const token = req.cookies.token
+        // console.log(req.cookies);
+        
+        // console.log(token);
+        
         if(!token){
-            return res.status(400).send({
+            return res.status(401).send({
                 success: false,
                 message: 'Unauthorized!'
             })
@@ -181,7 +199,7 @@ export const authMiddleware = async(req, res, next) =>{
         if(!id){
             return res.status(400).send({
                 success: false,
-                message: 'Unauthorized!'
+                message: 'Unauthorized id!'
             })
         }
 
