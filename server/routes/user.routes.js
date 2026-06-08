@@ -3,7 +3,9 @@ import { authMiddleware, forgotPasswordMiddleware, registerMiddleware, resetPass
 import { forgotPassword, logoutUser, registerUser, resendOtp, resetPassword, userLogin, verifyEmail } from '../controllers/auth.controller.js'
 import { validate } from '../middlewares/validate.middleware.js'
 import { forgotPasswordSchema, loginSchema, registerSchema, resendOtpSchema, resetPasswordSchema, verifyEmailSchema } from '../validators/auth.validator.js'
-import { getUserDetails } from '../controllers/user.controller.js'
+import { getUserDetails, updateUserDetails } from '../controllers/user.controller.js'
+import { updateUserMiddleware } from '../middlewares/user.middleware.js'
+import { updateUserSchema } from '../validators/user.validator.js'
 
 const userRouter = express.Router()
 
@@ -27,7 +29,7 @@ userRouter.use(authMiddleware)
 
 //user info
 userRouter.get('/details',getUserDetails)
-// router.put('/update',updateUserMiddleware,updateUserDetails)
+userRouter.put('/update',validate(updateUserSchema),updateUserMiddleware,updateUserDetails)
 // router.delete('/delete',deleteUser)
 
 userRouter.post('/logout', logoutUser)

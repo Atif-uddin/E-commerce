@@ -7,7 +7,7 @@ export const validate = (schema) =>{
         if(!result.success){
             return res.status(400).send({
                 success: false,
-                errors: result.error.flatten().fieldErrors
+                errors: result.error.issues
             })
         }
         req.validatedData = result.data

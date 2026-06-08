@@ -32,3 +32,10 @@ export const findUserByEmailAndDelete = async(email) =>{
     const user = await User.findOneAndDelete({email})
     return user
 }
+
+
+export const updateUser = async(id, updates) =>{
+    const user = await User.findByIdAndUpdate(id, updates, { returnDocument: 'after', runValidators: true})
+    .select('-authTokens -__v -createdAt -updatedAt -_id -password -status -isVerified')
+    return user
+}
