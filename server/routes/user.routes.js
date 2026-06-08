@@ -3,7 +3,7 @@ import { authMiddleware, forgotPasswordMiddleware, registerMiddleware, resetPass
 import { forgotPassword, logoutUser, registerUser, resendOtp, resetPassword, userLogin, verifyEmail } from '../controllers/auth.controller.js'
 import { validate } from '../middlewares/validate.middleware.js'
 import { forgotPasswordSchema, loginSchema, registerSchema, resendOtpSchema, resetPasswordSchema, verifyEmailSchema } from '../validators/auth.validator.js'
-import { getUserDetails, updateUserDetails } from '../controllers/user.controller.js'
+import { deleteUser, getUserDetails, updateUserDetails } from '../controllers/user.controller.js'
 import { updateUserMiddleware } from '../middlewares/user.middleware.js'
 import { updateUserSchema } from '../validators/user.validator.js'
 
@@ -30,7 +30,7 @@ userRouter.use(authMiddleware)
 //user info
 userRouter.get('/details',getUserDetails)
 userRouter.put('/update',validate(updateUserSchema),updateUserMiddleware,updateUserDetails)
-// router.delete('/delete',deleteUser)
+userRouter.delete('/delete',deleteUser)
 
 userRouter.post('/logout', logoutUser)
 

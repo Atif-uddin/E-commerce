@@ -13,7 +13,8 @@ router.get('/test',(req, res)=>{
 router.get('/', getAllProducts)
 router.get('/:productId',getProductById)
 
-router.use(authMiddleware, adminMiddleware)
+router.use(authMiddleware) 
+router.use(adminMiddleware)
 router.post('/', createProductMiddleware, createProduct)
 router.put('/:productId', updateProductMiddleware, updateProductById)
 router.delete('/:productId', deleteProductById)

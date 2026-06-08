@@ -1,30 +1,39 @@
 import mongoose from "mongoose";
 
 const categorySchema = new mongoose.Schema({
-    name:{
+    name: {
         type: String,
         required: true,
         unique: true,
-        trim: true
+        trim: true,
+        minlength: 3,
+        maxlength: 50
     },
-    description:{
-        type: String
+    description: {
+        type: String,
+        default: ""
     },
-    images:{
-        type: String
+    images: {
+        type: [
+            {
+                url: { type: String, required: true },
+                alt: { type: String, default: "" }
+            }
+        ],
+        default: []
     },
-    slug:{
+    slug: {
         type: String,
         required: true,
         unique: true,
         trim: true,
         lowercase: true
     },
-    isActive:{
+    isActive: {
         type: Boolean,
         default: true
     }
-},{
+}, {
     timestamps: true
 })
 

@@ -39,3 +39,9 @@ export const updateUser = async(id, updates) =>{
     .select('-authTokens -__v -createdAt -updatedAt -_id -password -status -isVerified')
     return user
 }
+
+export const deleteUserById = async(id) =>{
+    const user = await User.findByIdAndUpdate(id, {status: 'inActive', isVerified: false}, {returnDocument: 'after'})
+    await user.save()
+    return user
+}

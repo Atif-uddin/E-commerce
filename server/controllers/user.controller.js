@@ -1,4 +1,5 @@
-import { updateUser } from "../services/user.service.js";
+import { success } from "zod";
+import { deleteUserById, updateUser } from "../services/user.service.js";
 
 
 
@@ -44,6 +45,27 @@ export const updateUserDetails = async(req, res) =>{
         return res.status(500).send({
             success: false,
             message: 'Internal server Error'
+        })
+    }
+}
+
+export const deleteUser = async(req, res) =>{
+    try {
+        const userId = req.user._id
+        
+        await deleteUserById(userId)
+        
+        res.clearCookie('token')
+
+        return res.status(201).send({
+            success: true,
+            message: 'Account deleted Successfully'
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: 'Internal server Error '
         })
     }
 }
