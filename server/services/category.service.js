@@ -16,3 +16,8 @@ export const findCategoryByName = async(name) =>{
     const category = await Category.findOne({name: name.trim()})
     return category
 }
+
+export const getAllCategoryService = async() =>{
+    const categories = await Category.find({isActive: true}).select('__v')
+    return categories
+}
