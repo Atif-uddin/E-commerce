@@ -4,6 +4,8 @@ import cors from 'cors'
 import dbConnect from './config/mongo.config.js'
 import cookieParser from 'cookie-parser'
 import userRouter from './routes/user.routes.js'
+import productRouter from './routes/product.routes.js'
+import categoryRouter from './routes/category.routes.js'
 
 dotenv.config()
 
@@ -16,7 +18,8 @@ server.use(express.json())
 
 server.use('/api/users',userRouter)
 // server.use('/api/admin',adminRouter)
-// server.use('/api/products',productRouter)
+server.use('/api/category',categoryRouter)
+server.use('/api/products',productRouter)
 // server.use('/api/cart',cartRouter)
 // server.use('/api/wishlist',wishlistRouter)
 // server.use('/api/orders/',orderRouter)

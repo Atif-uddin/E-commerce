@@ -1,10 +1,13 @@
 
 
-export const validate = (schema) =>{
-    return(req, res, next) =>{
-        const result = schema.safeParse(req.body)
+export const validate = (schema, source = "body") => {
+    return (req, res, next) => {
+        const data =
+            source == "query" ? req.query : req.body;
 
-        if(!result.success){
+        const result = schema.safeParse(data)
+
+        if (!result.success) {
             return res.status(400).send({
                 success: false,
                 errors: result.error.issues
