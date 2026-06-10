@@ -3,7 +3,7 @@
 export const validate = (schema, source = "body") => {
     return (req, res, next) => {
         const data =
-            source == "query" ? req.query : req.body;
+            source == "query" ? req.query : source == 'params' ?req.params : req.body;
 
         const result = schema.safeParse(data)
 

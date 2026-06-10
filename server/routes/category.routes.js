@@ -1,8 +1,8 @@
 import express from 'express'
-import { createCategorySchema } from '../validators/category.validator.js'
+import { createCategorySchema, getCategoryIdSchema, updateCategorySchema } from '../validators/category.validator.js'
 import { validate } from '../middlewares/validate.middleware.js'
-import { createCategoryMiddleware } from '../middlewares/category.middleware.js'
-import { createCategory, getAllCategories } from '../controllers/category.controller.js'
+import { createCategoryMiddleware, updateCategoryMiddleware } from '../middlewares/category.middleware.js'
+import { createCategory, getAllCategories, getCategoryById } from '../controllers/category.controller.js'
 
 const categoryRouter = express.Router()
 
@@ -14,13 +14,13 @@ categoryRouter.get('/test',(req, res) =>{
 })
 
 categoryRouter.get('/',getAllCategories)
-// categoryRouter.get('/:categoryId', getCategoryById)
+categoryRouter.get('/:categoryId',validate(getCategoryIdSchema, 'params'), getCategoryById)
 
 // categoryRouter.use(authMiddleware, adminMiddleware)
 
 categoryRouter.post('/',validate(createCategorySchema),createCategoryMiddleware, createCategory)
 
-// categoryRouter.put('/:categoryId', updateCategoryMiddleware, updateCategory)
+categoryRouter.put('/:categoryId',validate(updateCategorySchema), updateCategoryMiddleware, updateCategory)
 
 // categoryRouter.delete('/delete/:categoryId',deleteCategory)
 

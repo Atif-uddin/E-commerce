@@ -7,6 +7,8 @@ export const createProductMiddleware = async(req, res, next) =>{
         const {name, category} = req.validatedData || {}
 
         const categoryExists = await findCategoryById(category)
+        console.log(categoryExists);
+        
         if(!categoryExists){
             return res.status(400).send({
                 success: false,
