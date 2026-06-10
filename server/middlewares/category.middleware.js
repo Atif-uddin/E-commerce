@@ -1,4 +1,3 @@
-import { success } from "zod"
 import { findCategoryById, findCategoryByName } from "../services/category.service.js"
 
 
@@ -55,6 +54,36 @@ export const updateCategoryMiddleware = async (req, res, next) => {
             return res.status(400).send({
                 success: false,
                 message: "No changes detected"
+            })
+        }
+        req.category = category
+        next()
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: "Internal server Error"
+        })
+    }
+}
+
+export const deleteCategoryMiddleware = async(req, res, next) =>{
+    try {
+        const {categoryId} = req.validatedParams
+
+        const category = await findCategoryById(categoryId)
+
+        if(!category){
+            return res.status(400).send({
+                success: false,
+                message: "Category not found!"
+            })
+        }
+        if(!category.isActive){
+            return res.status(400).send({
+                success: false,
+                message: "Category already Deleted!"
             })
         }
         req.category = category

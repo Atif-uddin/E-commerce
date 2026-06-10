@@ -1,5 +1,4 @@
-import { success } from "zod";
-import { createCategoryService, findCategoryByCategoryId, findCategoryById, getAllCategoryService, updateCategoryService } from "../services/category.service.js";
+import { createCategoryService, deleteCategoryService, findCategoryByCategoryId, findCategoryById, getAllCategoryService, updateCategoryService } from "../services/category.service.js";
 
 
 export const createCategory = async (req, res) => {
@@ -87,6 +86,24 @@ export const updateCategory = async(req, res) =>{
     } catch (error) {
         console.log(error);
         return res.status(500).send({
+            success: false,
+            message: "Internal server Error"
+        })
+    }
+}
+
+export const deleteCategory = async(req, res) =>{
+    try {
+        const {categoryId} = req.validatedParams
+        await deleteCategoryService(categoryId)
+
+        return res.status(200).send({
+            success: true,
+            message: 'Category deleted Successfully!'
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(400).send({
             success: false,
             message: "Internal server Error"
         })

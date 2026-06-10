@@ -41,3 +41,9 @@ export const updateCategoryService = async (categoryId, updateData) => {
 
     return updatedCategory;
 }
+
+export const deleteCategoryService = async(categoryId) =>{
+    const category = await Category.findByIdAndUpdate(categoryId, {isActive: false},{returnDocument: "after"})
+
+
+}

@@ -1,8 +1,8 @@
 import express from 'express'
 import { createCategorySchema, getCategoryIdSchema, updateCategorySchema } from '../validators/category.validator.js'
 import { validate } from '../middlewares/validate.middleware.js'
-import { createCategoryMiddleware, updateCategoryMiddleware } from '../middlewares/category.middleware.js'
-import { createCategory, getAllCategories, getCategoryById, updateCategory } from '../controllers/category.controller.js'
+import { createCategoryMiddleware, deleteCategoryMiddleware, updateCategoryMiddleware } from '../middlewares/category.middleware.js'
+import { createCategory, deleteCategory, getAllCategories, getCategoryById, updateCategory } from '../controllers/category.controller.js'
 
 const categoryRouter = express.Router()
 
@@ -22,7 +22,7 @@ categoryRouter.post('/',validate(createCategorySchema),createCategoryMiddleware,
 
 categoryRouter.put('/:categoryId',validate(updateCategorySchema),validate(getCategoryIdSchema, 'params'),updateCategoryMiddleware, updateCategory)
 
-// categoryRouter.delete('/delete/:categoryId',deleteCategory)
+categoryRouter.delete('/delete/:categoryId',validate(getCategoryIdSchema, 'params'), deleteCategoryMiddleware, deleteCategory)
 
 categoryRouter.use((req, res)=>{
     return res.status(404).send({
