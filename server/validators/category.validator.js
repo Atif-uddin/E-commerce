@@ -25,6 +25,7 @@ export const getCategoryIdSchema = z.object({
 
 
 export const updateCategorySchema = z.object({
+    
     name: z.string().trim().min(3, "Category name must be at least 3 characters")
         .max(50, "Category name cannot exceed 50 characters")
         .optional(),

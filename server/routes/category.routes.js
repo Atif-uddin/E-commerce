@@ -2,7 +2,7 @@ import express from 'express'
 import { createCategorySchema, getCategoryIdSchema, updateCategorySchema } from '../validators/category.validator.js'
 import { validate } from '../middlewares/validate.middleware.js'
 import { createCategoryMiddleware, updateCategoryMiddleware } from '../middlewares/category.middleware.js'
-import { createCategory, getAllCategories, getCategoryById } from '../controllers/category.controller.js'
+import { createCategory, getAllCategories, getCategoryById, updateCategory } from '../controllers/category.controller.js'
 
 const categoryRouter = express.Router()
 
@@ -20,7 +20,7 @@ categoryRouter.get('/:categoryId',validate(getCategoryIdSchema, 'params'), getCa
 
 categoryRouter.post('/',validate(createCategorySchema),createCategoryMiddleware, createCategory)
 
-categoryRouter.put('/:categoryId',validate(updateCategorySchema), updateCategoryMiddleware, updateCategory)
+categoryRouter.put('/:categoryId',validate(updateCategorySchema),validate(getCategoryIdSchema, 'params'),updateCategoryMiddleware, updateCategory)
 
 // categoryRouter.delete('/delete/:categoryId',deleteCategory)
 

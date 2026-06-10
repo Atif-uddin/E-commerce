@@ -3,7 +3,12 @@
 export const validate = (schema, source = "body") => {
     return (req, res, next) => {
         const data =
-            source == "query" ? req.query : source == 'params' ?req.params : req.body;
+            source == "query" ? req.query : source == 'params' ? req.params : req.body;
+
+        console.log("SOURCE:", source);
+        console.log("BODY:", req.body);
+        console.log("PARAMS:", req.params);
+        console.log("DATA:", data);
 
         const result = schema.safeParse(data)
 
@@ -13,7 +18,11 @@ export const validate = (schema, source = "body") => {
                 errors: result.error.issues
             })
         }
-        req.validatedData = result.data
+        if (source === "params") {
+            req.validatedParams = result.data;
+        } else {
+            req.validatedData = result.data;
+        }
         next()
     }
 }

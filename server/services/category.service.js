@@ -32,3 +32,12 @@ export const findCategoryByCategoryId = async (categoryId) => {
     return category
 }
 
+export const updateCategoryService = async (categoryId, updateData) => {
+
+    if (updateData.name) {
+        updateData.slug = slugify(updateData.name, { lower: true, strict: true });
+    }
+    const updatedCategory = await Category.findByIdAndUpdate(categoryId,updateData,{returnDocument: "after"}).select("-__v");
+
+    return updatedCategory;
+}

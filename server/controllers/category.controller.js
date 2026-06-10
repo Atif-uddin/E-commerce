@@ -1,5 +1,5 @@
 import { success } from "zod";
-import { createCategoryService, findCategoryByCategoryId, findCategoryById, getAllCategoryService } from "../services/category.service.js";
+import { createCategoryService, findCategoryByCategoryId, findCategoryById, getAllCategoryService, updateCategoryService } from "../services/category.service.js";
 
 
 export const createCategory = async (req, res) => {
@@ -73,7 +73,9 @@ export const getCategoryById = async (req, res) => {
 
 export const updateCategory = async(req, res) =>{
     try {
-        const {categoryId} = req.params
+        const {categoryId} = req.validatedParams
+            console.log(req.validatedData);
+
 
         const updatedCategory = await updateCategoryService(categoryId, req.validatedData)
 
