@@ -66,7 +66,7 @@ export const getAllProductsService = async (filters) => {
 
 export const createProductService = async (data) => {
 
-    const {name} = data
+    const { name } = data
     // Create product with slug
     const product = await Product.create({
         ...data,
@@ -76,7 +76,28 @@ export const createProductService = async (data) => {
     return product;
 };
 
-export const findProductByNameAndCategory =async(name, category) =>{
-    const product = await Product.findOne({name, category})
+export const findProductByNameAndCategory = async (name, category) => {
+    const product = await Product.findOne({ name, category })
+    return product
+}
+
+export const findProductById = async (productId) => {
+    const product = await Product.findById(productId).select('-createdAt -updatedAt -__v ')
+    return product
+}
+
+
+export const updateProductService = async (productId, updateData) => {
+
+    if (updateData.name) {
+        updateData.slug = slugify(updateData.name, { lower: true, strict: true });
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(productId, updateData, { new: true, runValidators: true }).select("-__v");
+    return updatedProduct;
+};
+
+export const deleteProductService = async(productId) =>{
+    const product = await Product.findByIdAndUpdate(productId,{isActive: false})
     return product
 }

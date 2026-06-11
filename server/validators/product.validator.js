@@ -42,3 +42,34 @@ export const createProductSchema = z.object({
         "Invalid Category ID"
     )
 });
+
+export const getProductIdSchema = z.object({
+    productId: z
+        .string()
+        .regex(
+            /^[0-9a-fA-F]{24}$/,
+            "Invalid Product ID"
+        )
+});
+
+
+export const updateProductSchema = z.object({
+    
+    name: z.string().trim().min(3).max(100).optional(),
+    description: z.string().min(10).optional(),
+    price: z.number().min(0).optional(),
+    images: z.array(z.string().url()).optional(),
+    stock: z.number().min(0).optional(),
+    brand: z.string().trim().optional(),
+    category: z.string().regex(
+        /^[0-9a-fA-F]{24}$/,
+        "Invalid Category ID"
+    ).optional(),
+
+    isActive: z.boolean().optional()
+}).refine(
+    (data) => Object.keys(data).length > 0,
+    {
+        message: "At least one field is required for update"
+    }
+);

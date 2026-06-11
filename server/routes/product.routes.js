@@ -1,8 +1,8 @@
 import express from 'express'
 import { validate } from '../middlewares/validate.middleware.js'
-import { createProductSchema, getAllProductsSchema } from '../validators/product.validator.js'
-import { createProduct, getAllProducts } from '../controllers/product.controller.js'
-import { createProductMiddleware } from '../middlewares/product.middleware.js'
+import { createProductSchema, getAllProductsSchema, getProductIdSchema, updateProductSchema } from '../validators/product.validator.js'
+import { createProduct, deleteProductById, getAllProducts, getProductById, updateProductById } from '../controllers/product.controller.js'
+import { createProductMiddleware, deleteProductMiddleware, updateProductMiddleware } from '../middlewares/product.middleware.js'
 
 const productRouter = express.Router()
 
@@ -15,13 +15,13 @@ productRouter.get('/test',(req, res)=>{
 
 //products-related
 productRouter.get('/',validate(getAllProductsSchema, "query"), getAllProducts)
-// productRouter.get('/:productId',getProductById)
+productRouter.get('/:productId',validate(getProductIdSchema, 'params'),getProductById)
 
 // productRouter.use(authMiddleware) 
 // productRouter.use(adminMiddleware)
 productRouter.post('/',validate(createProductSchema), createProductMiddleware, createProduct)
-// productRouter.put('/:productId', updateProductMiddleware, updateProductById)
-// productRouter.delete('/:productId', deleteProductById)
+productRouter.put('/:productId',validate(updateProductSchema), validate(getProductIdSchema, 'params'), updateProductMiddleware, updateProductById)
+productRouter.delete('/delete/:productId',validate(getProductIdSchema),deleteProductMiddleware,  deleteProductById)
 
 productRouter.use((req, res)=>{
     return res.status(404).send({

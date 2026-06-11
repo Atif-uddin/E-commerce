@@ -1,5 +1,5 @@
 import { success } from "zod";
-import { createProductService, getAllProductsService } from "../services/products.service.js";
+import { createProductService, deleteProductService, findProductById, getAllProductsService, updateProductService } from "../services/products.service.js";
 
 
 export const getAllProducts = async(req, res) =>{
@@ -52,3 +52,67 @@ export const createProduct = async (req, res) => {
         });
     }
 };
+
+export const getProductById = async(req, res) =>{
+    try {
+        const {productId} = req.validatedParams
+
+        const product = await findProductById(productId)
+
+        if(!product) {
+            return res.status(400).send({
+                success: false,
+                message: 'Product not Found!'
+            })
+        }
+        return res.status(200).send({
+            success: true,
+            data: product
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: "Internal server Error"
+        })
+    }
+}
+
+export const updateProductById = async(req, res) =>{
+    try {
+        const {productId} = req.validatedParams
+
+        const updatedProduct = await updateProductService(productId, req.validatedData)
+
+        return res.status(200).send({
+            success: true,
+            message: 'Product updated Successfully!',
+            data: updatedProduct
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(400).send({
+            success: false,
+            message: 'Internal server Error'
+        })
+    }
+}
+
+export const deleteProductById = async(req, res) =>{
+    try {
+        const {productId} = req.validatedParams
+
+        const deleteProduct = await deleteProductService(productId)
+
+        return res.status(200).send({
+            success: true,
+            message: 'Product deleted successfully!'
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: 'Internal Server Error'
+        })
+    }
+}
