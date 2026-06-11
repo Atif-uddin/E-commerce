@@ -21,7 +21,7 @@ productRouter.get('/:productId',validate(getProductIdSchema, 'params'),getProduc
 // productRouter.use(adminMiddleware)
 productRouter.post('/',validate(createProductSchema), createProductMiddleware, createProduct)
 productRouter.put('/:productId',validate(updateProductSchema), validate(getProductIdSchema, 'params'), updateProductMiddleware, updateProductById)
-productRouter.delete('/delete/:productId',validate(getProductIdSchema),deleteProductMiddleware,  deleteProductById)
+productRouter.delete('/delete/:productId',validate(getProductIdSchema, 'params'),deleteProductMiddleware,  deleteProductById)
 
 productRouter.use((req, res)=>{
     return res.status(404).send({
