@@ -199,7 +199,7 @@ export const authMiddleware = async(req, res, next) =>{
         if(!id){
             return res.status(400).send({
                 success: false,
-                message: 'Unauthorized id!'
+                message: 'User not found!'
             })
         }
 

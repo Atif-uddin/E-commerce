@@ -1,29 +1,30 @@
 import express from 'express'
+import { validate } from '../middlewares/validate.middleware.js'
+import { addToCartSchema } from '../validators/cart.validator.js'
+import { addToCartMiddleware } from '../middlewares/cart.middleware.js'
+import { addToCart, getCart } from '../controllers/cart.controller.js'
+import { authMiddleware } from '../middlewares/authMiddleware.js'
 
-const router = express.Router()
+const cartRouter = express.Router()
 
-router.get('/test',(req, res)=>{
+ cartRouter.get('/test',(req, res)=>{
     return res.send({
         success: true,
         message: 'Cart route is working'
     })
 })
+ cartRouter.use(authMiddleware)
+ cartRouter.get('/',getCart)
+ cartRouter.post('/add',validate(addToCartSchema),addToCartMiddleware, addToCart)
+//  cartRouter.put('/update/:productId/', updateCartItemsById)
+//  cartRouter.delete('/remove/:productId', deleteCartItemsById) 
+//  cartRouter.delete('/clear', clearCart)
 
-router.use(authMiddleware)
-
-router.get('/',getCart)
-
-router.post('/add', addToCart)
-
-router.put('/update/:productId/', updateCartItemsById)
-
-router.delete('/remove/:productId', deleteCartItemsById)
-router.delete('/clear', clearCart)
-
-
-router.use((req, res)=>{
+ cartRouter.use((req, res)=>{
     return res.status(404).send({
         success: false,
         message: "Route not Found"
     })
 })
+
+export default cartRouter
