@@ -1,4 +1,5 @@
-import { cancelOrderService, createOrderService, getAllOrdersService } from "../services/order.service.js"
+import { success } from "zod"
+import { cancelOrderService, createOrderService, getAllOrdersAdminService, getAllOrdersService } from "../services/order.service.js"
 
 
 export const createOrder = async(req, res) =>{
@@ -67,6 +68,27 @@ export const cancelOrder = async(req, res) =>{
             success: true,
             message: 'Order Cancelled Successfully!',
             data: cancelOrder
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: error.message || 'Internal server Error'
+        })
+    }
+}
+
+export const getAllOrdersAdmin = async(req, res) =>{
+    try {
+        const {page, limit} = req.validatedData
+
+        const orders = await getAllOrdersAdminService(page, limit)
+        console.log(orders);
+        
+
+        return res.status(200).send({
+            success: true,
+            data: orders
         })
     } catch (error) {
         console.log(error);

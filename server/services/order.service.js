@@ -72,3 +72,16 @@ export const cancelOrderService = async(order) =>{
 
     return order
 }
+
+export const getAllOrdersAdminService = async(page, limit) =>{
+    const skip = (page - 1) * limit
+
+    const orders = await Order.find({}) .populate('user','fullname email phoneNumber')
+        .populate('items.product','name price images')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .select('-__v -createdAt -updatedAt');
+        
+    return orders
+}
