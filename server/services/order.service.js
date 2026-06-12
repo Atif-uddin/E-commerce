@@ -56,3 +56,19 @@ export const findOrderById = async(orderId) =>{
     .select('-__v -createdAt -updatedAt');
     return order
 }
+
+export const cancelOrderService = async(order) =>{
+    for(const item of order.items){
+        const product = await findProductById(item.product)
+        if(product){
+            product.stock += item.quantity
+            await product.save()
+        }
+    }
+
+    order.orderStatus = 'cancelled'
+
+    await order.save()
+
+    return order
+}

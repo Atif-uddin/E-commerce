@@ -1,9 +1,9 @@
 import express from 'express'
 import { validate } from '../middlewares/validate.middleware.js'
-import { createOrderSchema, getAllOrdersSchema, getOrderIdSchema } from '../validators/order.validator.js'
+import { cancelOrderSchema, createOrderSchema, getAllOrdersSchema, getOrderIdSchema } from '../validators/order.validator.js'
 import { authMiddleware } from '../middlewares/authMiddleware.js'
-import { createOrderMiddleware, getOrderByIdMiddleware } from '../middlewares/order.middleware.js'
-import { createOrder, getAllOrders, getOrderById } from '../controllers/order.controller.js'
+import { cancelOrderMiddleware, createOrderMiddleware, getOrderByIdMiddleware } from '../middlewares/order.middleware.js'
+import { cancelOrder, createOrder, getAllOrders, getOrderById } from '../controllers/order.controller.js'
 
 const orderRouter = express.Router()
 
@@ -19,7 +19,7 @@ orderRouter.use(authMiddleware)
 orderRouter.get('/',validate(getAllOrdersSchema, 'query'), getAllOrders)
 orderRouter.post('/',validate(createOrderSchema), createOrderMiddleware, createOrder)
 orderRouter.get('/:orderId',validate(getOrderIdSchema, 'params'), getOrderByIdMiddleware, getOrderById)
-// orderRouter.put('/:orderId/cancel', cancelOrder)
+orderRouter.put('/:orderId/cancel',validate(cancelOrderSchema, 'params'), cancelOrderMiddleware, cancelOrder)
 
 
 // orderRouter.use(adminMiddleware)
