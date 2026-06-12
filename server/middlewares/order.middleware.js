@@ -1,5 +1,7 @@
+import { success } from "zod";
 import { findCartByUserId } from "../services/cart.service.js";
 import { findProductById } from "../services/products.service.js";
+import { findOrderById } from "../services/order.service.js";
 
 
 export const createOrderMiddleware = async(req, res, next) =>{
@@ -42,6 +44,43 @@ export const createOrderMiddleware = async(req, res, next) =>{
             }
         }
         req.cart = cart 
+        next()
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: error.message || 'Internal server Error'
+        })
+    }
+}
+
+
+export const getOrderByIdMiddleware = async(req, res, next) =>{
+    try {
+        const userId = req.user._id
+
+        const {orderId} = req.validatedParams
+        // console.log(orderId);
+        
+
+        const order = await findOrderById(orderId)
+
+        console.log(orderId);
+        
+        if(!order){
+            return res.status(400).send({
+                success: false,
+                message: 'Order not Found!'
+            })
+        }
+        if(order.user.toString() != userId.toString()){
+            return res.status(400).send({
+                success: false,
+                message: 'You are not authorized to view this Order!'
+            })
+        }
+        req.order = order
         next()
 
     } catch (error) {

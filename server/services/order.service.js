@@ -50,3 +50,9 @@ export const getAllOrdersService = async(userId, page, limit) =>{
         }
     }
 }
+
+export const findOrderById = async(orderId) =>{
+    const order = await Order.findById(orderId).populate('items.product','name price images')
+    .select('-__v -createdAt -updatedAt');
+    return order
+}

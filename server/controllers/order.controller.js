@@ -43,3 +43,18 @@ export const getAllOrders = async(req, res) =>{
         })
     }
 }
+
+export const getOrderById = async(req, res) =>{
+    try {
+        return res.status(200).send({
+            success: true,
+            data: req.order
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: error.message || 'Internal server Error'
+        })
+    }
+}
