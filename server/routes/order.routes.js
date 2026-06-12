@@ -1,8 +1,13 @@
 import express from 'express'
+import { validate } from '../middlewares/validate.middleware.js'
+import { createOrderSchema } from '../validators/order.validator.js'
+import { authMiddleware } from '../middlewares/authMiddleware.js'
+import { createOrderMiddleware } from '../middlewares/order.middleware.js'
+import { createOrder } from '../controllers/order.controller.js'
 
-const router = express.Router()
+const orderRouter = express.Router()
 
-router.get('/test', (req, res) => {
+orderRouter.get('/test', (req, res) => {
     return res.send({
         success: true,
         message: 'Order Router is Working'
@@ -10,20 +15,24 @@ router.get('/test', (req, res) => {
 })
 
 //orders-related
-router.use(authMiddleware)
-router.get('/',getAllOrders)
-router.get('/:orderId', getOrderById)
-router.post('/', createOrder)
-router.put('/:orderId/cancel', cancelOrder)
-
-router.use(adminMiddleware)
-router.get('/all',getAllOrdersAdmin)
-router.put('/:orderId/status', updateOrderStatusById)
+orderRouter.use(authMiddleware)
+// orderRouter.get('/',getAllOrders)
+orderRouter.post('/',validate(createOrderSchema), createOrderMiddleware, createOrder)
+// orderRouter.get('/:orderId', getOrderById)
+// orderRouter.put('/:orderId/cancel', cancelOrder)
 
 
-router.use((req, res) => {
+// orderRouter.use(adminMiddleware)
+// orderRouter.get('/admin/all',getAllOrdersAdmin)
+// orderRouter.put('/admin/:orderId/status', updateOrderStatusById)
+
+
+
+orderRouter.use((req, res) => {
     return res.status(404).send({
         success: false,
         message: 'Route not Found'
     })
 })
+
+export default orderRouter
