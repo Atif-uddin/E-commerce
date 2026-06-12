@@ -90,3 +90,14 @@ export const deleteCartService = async(cart, cartItem) =>{
 
     return await findCartByUserId(cart.user)
 }
+
+export const clearCartService = async(cart) =>{
+
+    cart.items = []
+
+    cart.totalAmount = 0
+
+    await cart.save()
+    
+    return await findCartByUserId(cart.user)
+}

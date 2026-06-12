@@ -129,6 +129,36 @@ export const deleteCartMiddleware = async(req, res, next) =>{
         req.cart = cart
         req.cartItem = cartItem
         next()
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: error.message || 'Internal server Error'
+        })
+    }
+}
+
+export const clearCartMiddleware = async(req, res, next) =>{
+    try {
+        const userId = req.user._id
+
+        const cart = await findCartByUserId(userId)
+
+        if(!cart){
+            return res.status(400).send({
+                success: false,
+                message: 'Cart not Found!'
+            })
+        }
+        if(cart.items.length == 0){
+            return res.status(400).send({
+                success: false,
+                message: 'Cart is already Empty!'
+            })
+        }
+        req.cart = cart
+        next()
         
     } catch (error) {
         console.log(error);
