@@ -1,4 +1,5 @@
-import { addToCartService, getCartService } from "../services/cart.service.js"
+import { success } from "zod"
+import { addToCartService, deleteCartService, getCartService, updateCartService } from "../services/cart.service.js"
 
 
 export const addToCart = async (req, res) => {
@@ -44,3 +45,45 @@ export const getCart = async (req, res) => {
         });
     }
 };
+
+
+export const updateCart = async(req, res) =>{
+    try {
+        const {quantity} = req.validatedData
+
+        const updatedCart = await updateCartService(
+            req.cart,
+            req.cartItem,
+            quantity
+        )
+        return res.status(200).send({
+            success: true,
+            message: 'Cart updated Successfully!',
+            data: updatedCart
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: error.message || 'Internal server Error'
+        })
+    }
+}
+
+export const deleteCart = async(req, res) =>{
+    try {
+        const updatedCart = await deleteCartService(req.cart, req.cartItem)
+
+        return res.status(200).send({
+            success: true,
+            message: 'Product removed from cart!',
+            data: updatedCart
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: error.message || 'Internal server Error'
+        })
+    }
+}

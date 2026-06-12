@@ -1,9 +1,10 @@
 import express from 'express'
 import { validate } from '../middlewares/validate.middleware.js'
-import { addToCartSchema } from '../validators/cart.validator.js'
-import { addToCartMiddleware } from '../middlewares/cart.middleware.js'
-import { addToCart, getCart } from '../controllers/cart.controller.js'
+import { addToCartSchema, deleteCartItemSchema, updateCartSchema } from '../validators/cart.validator.js'
+import { addToCartMiddleware, deleteCartMiddleware, updateCartMiddleware } from '../middlewares/cart.middleware.js'
+import { addToCart, deleteCart, getCart, updateCart } from '../controllers/cart.controller.js'
 import { authMiddleware } from '../middlewares/authMiddleware.js'
+import { getProductIdSchema } from '../validators/product.validator.js'
 
 const cartRouter = express.Router()
 
@@ -16,8 +17,9 @@ const cartRouter = express.Router()
  cartRouter.use(authMiddleware)
  cartRouter.get('/',getCart)
  cartRouter.post('/add',validate(addToCartSchema),addToCartMiddleware, addToCart)
-//  cartRouter.put('/update/:productId/', updateCartItemsById)
-//  cartRouter.delete('/remove/:productId', deleteCartItemsById) 
+ cartRouter.put('/update/:productId/',validate(getProductIdSchema, 'params'),
+  validate(updateCartSchema), updateCartMiddleware, updateCart)
+ cartRouter.delete('/remove/:productId',validate(deleteCartItemSchema, 'params'),deleteCartMiddleware, deleteCart) 
 //  cartRouter.delete('/clear', clearCart)
 
  cartRouter.use((req, res)=>{

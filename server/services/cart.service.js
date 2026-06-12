@@ -69,3 +69,24 @@ export const getCartService = async (userId) => {
 
     return cart;
 };
+
+export const updateCartService = async(cart, cartItem, quantity) =>{
+    cartItem.quantity = quantity
+
+    cart.totalAmount = cart.items.reduce(
+        (total, item) => total + (item.price * item.quantity), 0
+    )
+    await cart.save()
+    return await findCartByUserId(cart.user)
+}
+
+export const deleteCartService = async(cart, cartItem) =>{
+    cart.items = cart.items.filter(
+        item => item.product.toString() != cartItem.product.toString()
+    )
+    cart.totalAmount = cart.items.reduce((total, item) => total + (item.price * item.quantity), 0)
+
+    await cart.save()
+
+    return await findCartByUserId(cart.user)
+}
