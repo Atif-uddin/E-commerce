@@ -28,3 +28,25 @@ export const createOrderService = async(userId, cart, shippingAddress) =>{
     return await Order.findById(order._id)
     .select('-createdAt -updatedAt -__v')
 }
+
+
+export const getAllOrdersService = async(userId, page, limit) =>{
+
+    const skip = (page - 1) * limit
+
+    const orders = await Order.find({ user: userId })
+    .populate('items.product','name price images')
+    .sort({createAt : -1}).skip(skip).limit(limit).select('-__v -createdAt -updatedAt')
+
+    const totalOrders = await Order.countDocuments({user: userId})
+
+    return{
+        orders,
+        pagination : {
+            currentPage: page,
+            totalPages: Math.ceil(totalOrders / limit),
+            totalOrders,
+            limit
+        }
+    }
+}
