@@ -85,3 +85,11 @@ export const getAllOrdersAdminService = async(page, limit) =>{
         
     return orders
 }
+
+export const updateOrderStatusService = async(order, orderStatus) =>{
+    
+    order.orderStatus = orderStatus
+
+    await order.save()
+    return order
+}

@@ -19,3 +19,16 @@ export const cancelOrderSchema = z.object({
     orderId: z.string().regex(/^[0-9a-fA-F]{24}$/,"Invalid Order ID")
 });
 
+export const updateOrderStatusParamsSchema = z.object({
+    orderId: z.string().regex(/^[0-9a-fA-F]{24}$/,"Invalid Order ID")
+});
+
+export const updateOrderStatusBodySchema = z.object({
+    orderStatus: z.enum([
+        "pending",
+        "processing",
+        "shipped",
+        "delivered",
+        "cancelled"
+    ])
+});

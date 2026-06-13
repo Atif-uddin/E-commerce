@@ -140,3 +140,44 @@ export const cancelOrderMiddleware = async(req, res, next) =>{
         })
     }
 }
+
+
+export const updateOrderStatusMiddleware = async(req, res, next) =>{
+    try {
+        const {orderId} =req.validatedParams
+        const {orderStatus} = req.validatedData
+
+        const order = await findOrderById(orderId)
+
+        if(!order){
+            return res.status(400).send({
+                success: false,
+                message: 'Order not Found!'
+            })
+        }
+
+        const validTransitions = {
+            pending : ['processing', 'cancelled'],
+            processing : ['shipped', 'cancelled'],
+            shipped : ['delivered'],
+            delivered : [],
+            cancelled : []
+        }
+        if(!validTransitions[order.orderStatus].includes(orderStatus)){
+            return res.status(400).send({
+                success: false,
+                message: `Cannot change order status from ${order.orderStatus} to ${orderStatus}`
+            })
+        }
+
+        req.order = order
+        next()
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: error.message || 'Internal server Error'
+        })
+    }
+}
