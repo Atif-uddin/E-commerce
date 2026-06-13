@@ -1,9 +1,9 @@
 import express from 'express'
 import { authMiddleware } from '../middlewares/authMiddleware.js'
-import { addToWishlist, clearWishlist, getWishlist, removeFromWishlist } from '../controllers/wishlist.controller.js'
+import { addToWishlist, clearWishlist, getWishlist, moveToCart, removeFromWishlist } from '../controllers/wishlist.controller.js'
 import { validate } from '../middlewares/validate.middleware.js'
 import { addToWishlistSchema, removeFromWishlistSchema } from '../validators/wishlist.validator.js'
-import { addToWishlistMiddleware, clearWishlistMiddleware, removeFromWishlistMiddleware } from '../middlewares/wishlist.middleware.js'
+import { addToWishlistMiddleware, clearWishlistMiddleware, moveToCartMiddleware, removeFromWishlistMiddleware } from '../middlewares/wishlist.middleware.js'
 
 const wishlistRouter = express.Router()
 
@@ -19,7 +19,7 @@ wishlistRouter.use(authMiddleware)
 wishlistRouter.get('/', getWishlist)
 
 wishlistRouter.post('/add/:productId',validate(addToWishlistSchema, 'params'), addToWishlistMiddleware, addToWishlist)
-// wishlistRouter.post('/move-to-cart', moveToCart)
+wishlistRouter.post('/move-to-cart', moveToCartMiddleware, moveToCart)
 
 wishlistRouter.delete('/remove/:productId',validate(removeFromWishlistSchema, 'params'),removeFromWishlistMiddleware, removeFromWishlist)
 
