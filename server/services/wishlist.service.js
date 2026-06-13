@@ -33,3 +33,15 @@ export const addToWishlistService = async (userId, productId) => {
     await wishlist.save()
     return wishlist
 }
+
+
+export const removeFromWishlistService = async (wishlist, productId) => {
+    wishlist.products = wishlist.products.filter(
+        item => item.toString() != productId
+    )
+    await wishlist.save()
+
+    const updatedWishlist = await Wishlist.findById(wishlist._id)
+        .select('-createdAt -updatedAt -__v');
+    return updatedWishlist;
+}

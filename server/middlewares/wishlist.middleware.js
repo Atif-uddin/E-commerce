@@ -37,3 +37,40 @@ export const addToWishlistMiddleware = async (req, res, next) => {
         })
     }
 }
+
+
+export const removeFromWishlistMiddleware = async(req, res, next) =>{
+    try {
+        const userId = req.user._id
+
+        const {productId} =req.validatedParams
+
+        const wishlist = await findWishlistByUserId(userId)
+
+        if(!wishlist){
+            return res.status(400).send({
+                success: false,
+                message: 'Wishlist not Found!'
+            })
+        }
+
+        const productExists = wishlist.products.some(
+            item => item.toString() == productId
+        )
+        if(!productExists){
+            return res.status(400).send({
+                success: false,
+                message: 'Product not found in Wishlist!'
+            })
+        }
+        req.wishlist = wishlist
+        next()
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: error.message || 'Internal server Error'
+        })
+    }
+}
