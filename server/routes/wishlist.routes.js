@@ -1,28 +1,32 @@
 import express from 'express'
+import { authMiddleware } from '../middlewares/authMiddleware.js'
+import { getWishlist } from '../controllers/wishlist.controller.js'
 
-const router = express.Router()
+const wishlistRouter = express.Router()
 
-router.get('/',(req, res)=>{
+wishlistRouter.get('/test',(req, res)=>{
     return res.send({
         success: true,
         message: 'Wishlist Route is Working'
     })
 })
 
-router.use(authMiddleware)
+wishlistRouter.use(authMiddleware)
 
-router.get('/', getWishlist)
+wishlistRouter.get('/', getWishlist)
 
-router.post('/add/:productId', addToWishlist)
-router.post('/move-to-cart', moveToCart)
+// wishlistRouter.post('/add/:productId', addToWishlist)
+// wishlistRouter.post('/move-to-cart', moveToCart)
 
-router.delete('/remove/:productId', removeFromWishlist)
+// wishlistRouter.delete('/remove/:productId', removeFromWishlist)
 
-router.delete('/clear', clearWishlist)
+// wishlistRouter.delete('/clear', clearWishlist)
 
-router.use((req, res)=>{
+wishlistRouter.use((req, res)=>{
     return res.status(404).send({
         success: false,
         message: 'Route not Found'
     })
 })
+
+export default wishlistRouter

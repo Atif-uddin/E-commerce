@@ -8,6 +8,7 @@ import productRouter from './routes/product.routes.js'
 import categoryRouter from './routes/category.routes.js'
 import cartRouter from './routes/cart.routes.js'
 import orderRouter from './routes/order.routes.js'
+import wishlistRouter from './routes/wishlist.routes.js'
 
 dotenv.config()
 
@@ -23,7 +24,7 @@ server.use('/api/users',userRouter)
 server.use('/api/category',categoryRouter)
 server.use('/api/products',productRouter)
 server.use('/api/cart',cartRouter)
-// server.use('/api/wishlist',wishlistRouter)
+server.use('/api/wishlist',wishlistRouter)
 server.use('/api/orders/',orderRouter)
 
 server.listen(PORT, ()=>{
