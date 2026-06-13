@@ -18,7 +18,9 @@ export const addToWishlistMiddleware = async (req, res, next) => {
             })
         }
         const wishlist = await findWishlistByUserId(userId)
-        
+        console.log(wishlist.products);
+        console.log(productId);
+
         if (wishlist && wishlist.products.some(
             item => item.toString() == productId)) {
             return res.status(400).send({
@@ -39,15 +41,15 @@ export const addToWishlistMiddleware = async (req, res, next) => {
 }
 
 
-export const removeFromWishlistMiddleware = async(req, res, next) =>{
+export const removeFromWishlistMiddleware = async (req, res, next) => {
     try {
         const userId = req.user._id
 
-        const {productId} =req.validatedParams
+        const { productId } = req.validatedParams
 
         const wishlist = await findWishlistByUserId(userId)
 
-        if(!wishlist){
+        if (!wishlist) {
             return res.status(400).send({
                 success: false,
                 message: 'Wishlist not Found!'
@@ -57,7 +59,7 @@ export const removeFromWishlistMiddleware = async(req, res, next) =>{
         const productExists = wishlist.products.some(
             item => item.toString() == productId
         )
-        if(!productExists){
+        if (!productExists) {
             return res.status(400).send({
                 success: false,
                 message: 'Product not found in Wishlist!'
@@ -65,7 +67,37 @@ export const removeFromWishlistMiddleware = async(req, res, next) =>{
         }
         req.wishlist = wishlist
         next()
-        
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: error.message || 'Internal server Error'
+        })
+    }
+}
+
+export const clearWishlistMiddleware = async (req, res, next) => {
+    try {
+        const userId = req.user._id
+
+        const wishlist = await findWishlistByUserId(userId)
+
+        if (!wishlist) {
+            return res.status(400).send({
+                success: false,
+                message: 'Wishlist not Found!'
+            })
+        }
+        if (wishlist.products.length == 0) {
+            return res.status(400).send({
+                success: false,
+                message: 'Wishlist is already empty!'
+            })
+        }
+        req.wishlist = wishlist
+        next()
+
     } catch (error) {
         console.log(error);
         return res.status(500).send({

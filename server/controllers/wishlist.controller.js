@@ -1,5 +1,5 @@
 import { success } from "zod";
-import { addToWishlistService, getWishlistService, removeFromWishlistService } from "../services/wishlist.service.js";
+import { addToWishlistService, clearWishlistService, getWishlistService, removeFromWishlistService } from "../services/wishlist.service.js";
 
 
 export const getWishlist = async(req, res) =>{
@@ -58,6 +58,24 @@ export const removeFromWishlist = async(req, res) =>{
             data: wishlist
         })
 
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: error.message || 'Internal server Error'
+        })
+    }
+}
+
+export const clearWishlist = async(req, res) =>{
+    try {
+        const wishlist = await clearWishlistService(req.wishlist)
+
+        return res.status(200).send({
+            success: true,
+            message: 'Wishlist cleared Successfully!',
+            data: wishlist
+        })
     } catch (error) {
         console.log(error);
         return res.status(500).send({

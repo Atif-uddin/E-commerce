@@ -30,8 +30,11 @@ export const addToWishlistService = async (userId, productId) => {
             .select('-createdAt -updatedAt -__v');
     }
     wishlist.products.push(productId)
+    
     await wishlist.save()
-    return wishlist
+    
+    return await Wishlist.findById(wishlist._id)
+    .select('-createdAt -updatedAt -__v');
 }
 
 
@@ -44,4 +47,20 @@ export const removeFromWishlistService = async (wishlist, productId) => {
     const updatedWishlist = await Wishlist.findById(wishlist._id)
         .select('-createdAt -updatedAt -__v');
     return updatedWishlist;
+}
+
+
+export const findWishlistById = async (wishlistId) => {
+    return await Wishlist.findById(wishlistId)
+        .select('-createdAt -updatedAt -__v');
+}
+
+
+export const clearWishlistService = async(wishlist) =>{
+
+    wishlist.products = []
+
+    await wishlist.save()
+
+    return findWishlistById(wishlist._id)
 }
