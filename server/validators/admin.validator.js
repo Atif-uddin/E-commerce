@@ -9,10 +9,21 @@ export const adminLoginSchema = z.object({
 });
 
 
+export const objectIdSchema = z.string().refine(
+    (id) => mongoose.Types.ObjectId.isValid(id),
+    {
+        message: "Invalid Id"
+    }
+);
+
 export const getUserByIdSchema = z.object({
-    userId: z.string().refine((id) => mongoose.Types.ObjectId.isValid(id),
-        {
-            message: "Invalid User Id"
-        }
-    )
+    userId: objectIdSchema
+});
+
+export const updateUserByIdBodySchema = z.object({
+    status: z.enum(['active','inactive','pending'])
+});
+
+export const updateUserByIdParamsSchema = z.object({
+    userId: objectIdSchema
 });

@@ -1,8 +1,8 @@
 import express from 'express'
-import { adminLoginSchema, getUserByIdSchema } from '../validators/admin.validator.js'
+import { adminLoginSchema, getUserByIdSchema, updateUserByIdBodySchema, updateUserByIdParamsSchema } from '../validators/admin.validator.js'
 import { validate } from '../middlewares/validate.middleware.js'
-import { adminLoginMiddleware, getUserByIdMiddleware } from '../middlewares/admin.middleware.js'
-import { getAllUsers, getDashboard, getUserById, loginAdmin } from '../controllers/admin.controller.js'
+import { adminLoginMiddleware, getUserByIdMiddleware, updateUserByIdMiddleware } from '../middlewares/admin.middleware.js'
+import { getAllUsers, getDashboard, getUserById, loginAdmin, updateUserById } from '../controllers/admin.controller.js'
 
 
 const adminRouter = express.Router()
@@ -24,7 +24,8 @@ adminRouter.get('/dashboard', getDashboard)
 // //user-related
 adminRouter.get('/users', getAllUsers)
 adminRouter.get('/users/:userId',validate(getUserByIdSchema, 'params'), getUserByIdMiddleware, getUserById)
-// adminRouter.put('/users/:userId', updateUserById)
+adminRouter.put('/users/:userId',validate(updateUserByIdParamsSchema, 'params'),
+    validate(updateUserByIdBodySchema), updateUserByIdMiddleware, updateUserById)
 // adminRouter.delete('/users/:userId', deleteUser)
 
 // adminRouter.post('/logout', AdminLogout)

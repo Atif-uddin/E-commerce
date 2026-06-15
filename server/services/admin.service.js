@@ -51,7 +51,7 @@ export const getDashboardService = async () => {
     ])
     const totalRevenue = revenueData.length > 0 ? revenueData[0].totalRevenue : 0
 
-    return{
+    return {
         totalUsers,
         totalProducts,
         totalOrders,
@@ -61,11 +61,35 @@ export const getDashboardService = async () => {
 }
 
 
-export const getAllUsersService = async() =>{
-    const users = await User.find({role: 'user'}).select('-password -authTokens -__v -createdAt -updatedAt')
+export const getAllUsersService = async () => {
+    const users = await User.find({ role: 'user' }).select('-password -authTokens -__v -createdAt -updatedAt')
     return users
 }
 
-export const getUserByIdService = async(user) =>{
-    return user
+export const getUserByIdService = async (user) => {
+    return {
+        _id: user._id,
+        name: user.fullname,
+        role: user.role,
+        email: user.email,
+        status: user.status,
+        isVerified: user.isVerified
+    }
+}
+
+export const updateUserService = async (user, status) => {
+
+    user.status = status
+
+    await user.save()
+
+    return {
+        _id: user._id,
+        name: user.fullname,
+        role: user.role,
+        email: user.email,
+        status: user.status,
+        isVerified: user.isVerified
+
+    }
 }
