@@ -1,16 +1,21 @@
 import { success } from "zod";
 import { deleteUserService, getAllUsersService, getDashboardService, getUserByIdService, loginAdminService, updateUserService } from "../services/admin.service.js";
+import { cookieConfig } from "../config/cookie.config.js";
 
 
-export const loginAdmin = async(req, res) =>{
+export const loginAdmin = async (req, res) => {
     try {
-        const admin = await loginAdminService(req.user)
+        const admin = req.user;
+
+        const { user, token } = await loginAdminService(admin);
+
+        res.cookie('adminToken', token, cookieConfig);
 
         return res.status(200).send({
             success: true,
-            message: 'Admin Login Successfull!',
-            data: admin
-        })
+            message: 'Admin Login Successful!',
+            data: user
+        });
     } catch (error) {
         console.log(error);
         return res.status(500).send({
@@ -20,7 +25,7 @@ export const loginAdmin = async(req, res) =>{
     }
 }
 
-export const getDashboard = async(req, res) =>{
+export const getDashboard = async (req, res) => {
     try {
         const dashboard = await getDashboardService()
 
@@ -38,7 +43,7 @@ export const getDashboard = async(req, res) =>{
 }
 
 
-export const getAllUsers = async(req, res) =>{
+export const getAllUsers = async (req, res) => {
     try {
         const users = await getAllUsersService()
 
@@ -56,7 +61,7 @@ export const getAllUsers = async(req, res) =>{
 }
 
 
-export const getUserById = async(req, res) =>{
+export const getUserById = async (req, res) => {
     try {
         const user = await getUserByIdService(req.targetUser)
 
@@ -73,7 +78,7 @@ export const getUserById = async(req, res) =>{
     }
 }
 
-export const updateUserById = async(req, res) =>{
+export const updateUserById = async (req, res) => {
     try {
         const updateStatus = req.validatedData.status
         const updatedUser = await updateUserService(req.targetUser, updateStatus)
@@ -93,9 +98,9 @@ export const updateUserById = async(req, res) =>{
 }
 
 
-export const deleteUser = async(req, res) =>{
+export const deleteUser = async (req, res) => {
     try {
-       const deletedUser =  await deleteUserService(req.targetUser)
+        const deletedUser = await deleteUserService(req.targetUser)
 
         return res.status(200).send({
             success: true,
@@ -110,3 +115,24 @@ export const deleteUser = async(req, res) =>{
         })
     }
 }
+
+export const AdminLogout = async (req, res) => {
+    try {
+
+        res.clearCookie('adminToken', cookieConfig);
+
+        return res.status(200).send({
+            success: true,
+            message: 'Admin logged out successfully!'
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        return res.status(500).send({
+            success: false,
+            message: error.message || 'Internal Server Error'
+        });
+    }
+};
