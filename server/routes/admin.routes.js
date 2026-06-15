@@ -1,8 +1,8 @@
 import express from 'express'
-import { adminLoginSchema } from '../validators/admin.validator.js'
+import { adminLoginSchema, getUserByIdSchema } from '../validators/admin.validator.js'
 import { validate } from '../middlewares/validate.middleware.js'
-import { adminLoginMiddleware } from '../middlewares/admin.middleware.js'
-import { getAllUsers, getDashboard, loginAdmin } from '../controllers/admin.controller.js'
+import { adminLoginMiddleware, getUserByIdMiddleware } from '../middlewares/admin.middleware.js'
+import { getAllUsers, getDashboard, getUserById, loginAdmin } from '../controllers/admin.controller.js'
 
 
 const adminRouter = express.Router()
@@ -23,7 +23,7 @@ adminRouter.get('/dashboard', getDashboard)
 
 // //user-related
 adminRouter.get('/users', getAllUsers)
-// adminRouter.get('/users/:userId', getUserById)
+adminRouter.get('/users/:userId',validate(getUserByIdSchema, 'params'), getUserByIdMiddleware, getUserById)
 // adminRouter.put('/users/:userId', updateUserById)
 // adminRouter.delete('/users/:userId', deleteUser)
 

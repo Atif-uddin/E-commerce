@@ -1,5 +1,7 @@
+import { success } from "zod";
 import { findAdminByEmail } from "../services/admin.service.js";
 import { comparePassword } from "../utils/bcrypt.js";
+import { findUserById } from "../services/user.service.js";
 
 
 export const adminLoginMiddleware = async (req, res, next) => {
@@ -39,6 +41,31 @@ export const adminLoginMiddleware = async (req, res, next) => {
         req.user = user
         next()
 
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: error.message || 'Internal server Error'
+        })
+    }
+}
+
+
+export const getUserByIdMiddleware = async(req, res, next) =>{
+    try {
+        const {userId} = req.validatedParams
+
+        const user = await findUserById(userId)
+
+        if(!user){
+            return res.status(400).send({
+                success: false,
+                message: 'User not Found!'
+            })
+        }
+        req.targetUser = user
+        next()
+        
     } catch (error) {
         console.log(error);
         return res.status(500).send({
