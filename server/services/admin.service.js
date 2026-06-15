@@ -60,3 +60,8 @@ export const getDashboardService = async () => {
     }
 }
 
+
+export const getAllUsersService = async() =>{
+    const users = await User.find({role: 'user'}).select('-password -authTokens -__v -createdAt -updatedAt')
+    return users
+}

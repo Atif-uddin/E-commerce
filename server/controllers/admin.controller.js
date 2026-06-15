@@ -1,4 +1,5 @@
-import { getDashboardService, loginAdminService } from "../services/admin.service.js";
+import { success } from "zod";
+import { getAllUsersService, getDashboardService, loginAdminService } from "../services/admin.service.js";
 
 
 export const loginAdmin = async(req, res) =>{
@@ -26,6 +27,24 @@ export const getDashboard = async(req, res) =>{
         return res.status(200).send({
             success: false,
             data: dashboard
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: error.message || 'Internal server Error'
+        })
+    }
+}
+
+
+export const getAllUsers = async(req, res) =>{
+    try {
+        const users = await getAllUsersService()
+
+        return res.status(200).send({
+            success: true,
+            data: users
         })
     } catch (error) {
         console.log(error);
