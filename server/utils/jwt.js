@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 
 
-export const generateJwtToken = async(payload)=>{
+export const generateJwtToken = (payload)=>{
     // console.log('Generate payload: ', payload);
     
     try {

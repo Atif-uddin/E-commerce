@@ -1,9 +1,13 @@
 import express from 'express'
+import { adminLoginSchema } from '../validators/admin.validator.js'
+import { validate } from '../middlewares/validate.middleware.js'
+import { adminLoginMiddleware } from '../middlewares/admin.middleware.js'
+import { loginAdmin } from '../controllers/admin.controller.js'
 
 
-const router = express.Router()
+const adminRouter = express.Router()
 
-router.get('/',(req, res)=>{
+adminRouter.get('/',(req, res)=>{
     return res.send({
         success: true,
         message: 'Admin Router is Working'
@@ -11,24 +15,26 @@ router.get('/',(req, res)=>{
 })
 
 //admin-related
-router.post('/login',AdminLoginMiddleware, loginAdmin)
+adminRouter.post('/login',validate(adminLoginSchema), adminLoginMiddleware, loginAdmin)
 
-router.use(authMiddleware, adminMiddleware)
+// adminRouter.use(authMiddleware, adminMiddleware)
 
-router.get('/dashboard', getDashboard)
+// adminRouter.get('/dashboard', getDashboard)
 
-//user-related
-router.get('/users', getAllUsers)
-router.get('/users/:userId', getUserById)
-router.put('/users/:userId', updateUserById)
-router.delete('/users/:userId', deleteUser)
+// //user-related
+// adminRouter.get('/users', getAllUsers)
+// adminRouter.get('/users/:userId', getUserById)
+// adminRouter.put('/users/:userId', updateUserById)
+// adminRouter.delete('/users/:userId', deleteUser)
 
-router.post('/logout', AdminLogout)
+// adminRouter.post('/logout', AdminLogout)
 
 
-router.use((req,res)=>{
+adminRouter.use((req,res)=>{
     return res.status(404).send({
         success: false,
         message: 'Route not Found'
     })
 })
+
+export default adminRouter

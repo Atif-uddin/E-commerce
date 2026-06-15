@@ -1,7 +1,8 @@
 import User from '../models/user.js'
 import { hashPassword } from '../utils/bcrypt.js'
-import generateOtp from '../utils/otp.js'
+import {generateOtp} from '../utils/otp.js'
 import { sendOtp } from '../services/email.service.js'
+import dbConnect from '../config/mongo.config.js'
 
 const seedAdmin = async () => {
     try {
@@ -26,7 +27,8 @@ const seedAdmin = async () => {
                     expires
                 }
             },
-            isVerified: false
+            isVerified: true,
+            status : 'active'
         }
         adminData.password = await hashPassword(adminData.password)
 
@@ -43,4 +45,5 @@ const seedAdmin = async () => {
     }
 }
 
+await dbConnect()
 await seedAdmin()
