@@ -2,7 +2,7 @@ import express from 'express'
 import { adminLoginSchema } from '../validators/admin.validator.js'
 import { validate } from '../middlewares/validate.middleware.js'
 import { adminLoginMiddleware } from '../middlewares/admin.middleware.js'
-import { loginAdmin } from '../controllers/admin.controller.js'
+import { getDashboard, loginAdmin } from '../controllers/admin.controller.js'
 
 
 const adminRouter = express.Router()
@@ -19,7 +19,7 @@ adminRouter.post('/login',validate(adminLoginSchema), adminLoginMiddleware, logi
 
 // adminRouter.use(authMiddleware, adminMiddleware)
 
-// adminRouter.get('/dashboard', getDashboard)
+adminRouter.get('/dashboard', getDashboard)
 
 // //user-related
 // adminRouter.get('/users', getAllUsers)
