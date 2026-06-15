@@ -93,3 +93,17 @@ export const updateUserService = async (user, status) => {
 
     }
 }
+
+export const deleteUserService = async (user) => {
+
+    user.status = 'inActive';
+
+    await user.save();
+    return {
+        _id: user._id,
+        fullname: user.fullname,
+        email: user.email,
+        role: user.role,
+        status: user.status
+    };
+}

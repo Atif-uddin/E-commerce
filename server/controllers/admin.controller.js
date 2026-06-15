@@ -1,4 +1,5 @@
-import { getAllUsersService, getDashboardService, getUserByIdService, loginAdminService, updateUserService } from "../services/admin.service.js";
+import { success } from "zod";
+import { deleteUserService, getAllUsersService, getDashboardService, getUserByIdService, loginAdminService, updateUserService } from "../services/admin.service.js";
 
 
 export const loginAdmin = async(req, res) =>{
@@ -81,6 +82,25 @@ export const updateUserById = async(req, res) =>{
             success: true,
             message: 'User updated Successfully!',
             data: updatedUser
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: error.message || 'Internal server Error'
+        })
+    }
+}
+
+
+export const deleteUser = async(req, res) =>{
+    try {
+       const deletedUser =  await deleteUserService(req.targetUser)
+
+        return res.status(200).send({
+            success: true,
+            message: 'User deleted Successfully!',
+            data: deletedUser
         })
     } catch (error) {
         console.log(error);

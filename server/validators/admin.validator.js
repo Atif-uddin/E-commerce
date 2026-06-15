@@ -27,3 +27,7 @@ export const updateUserByIdBodySchema = z.object({
 export const updateUserByIdParamsSchema = z.object({
     userId: objectIdSchema
 });
+
+export const deleteUserParamsSchema = z.object({
+    userId: objectIdSchema
+});
