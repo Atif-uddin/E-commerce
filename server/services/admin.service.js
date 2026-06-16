@@ -11,7 +11,7 @@ export const findAdminByEmail = async (email) => {
 
 export const loginAdminService = async (admin) => {
 
-    const token = generateJwtToken({ userId: admin._id, role: admin.role })
+    const token = generateJwtToken({ _id : admin._id, role: admin.role })
 
     return {
         user: {

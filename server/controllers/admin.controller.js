@@ -30,7 +30,7 @@ export const getDashboard = async (req, res) => {
         const dashboard = await getDashboardService()
 
         return res.status(200).send({
-            success: false,
+            success: true,
             data: dashboard
         })
     } catch (error) {

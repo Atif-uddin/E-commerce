@@ -1,8 +1,9 @@
 import express from 'express'
 import { adminLoginSchema, deleteUserParamsSchema, getUserByIdSchema, updateUserByIdBodySchema, updateUserByIdParamsSchema } from '../validators/admin.validator.js'
 import { validate } from '../middlewares/validate.middleware.js'
-import { adminLoginMiddleware, deleteUserMiddleware, getUserByIdMiddleware, updateUserByIdMiddleware } from '../middlewares/admin.middleware.js'
+import { adminLoginMiddleware, adminMiddleware, deleteUserMiddleware, getUserByIdMiddleware, updateUserByIdMiddleware } from '../middlewares/admin.middleware.js'
 import { AdminLogout, deleteUser, getAllUsers, getDashboard, getUserById, loginAdmin, updateUserById } from '../controllers/admin.controller.js'
+import { authMiddleware } from '../middlewares/authMiddleware.js'
 
 
 const adminRouter = express.Router()
@@ -17,7 +18,7 @@ adminRouter.get('/',(req, res)=>{
 //admin-related
 adminRouter.post('/login',validate(adminLoginSchema), adminLoginMiddleware, loginAdmin)
 
-// adminRouter.use(authMiddleware, adminMiddleware)
+adminRouter.use(authMiddleware, adminMiddleware)
 
 adminRouter.get('/dashboard', getDashboard)
 

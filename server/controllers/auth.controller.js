@@ -99,7 +99,7 @@ export const userLogin = async(req, res) =>{
     console.log(user);
     console.log(user._id);
     
-    const token = await generateJwtToken(user._id)
+    const token = await generateJwtToken(user)
     // console.log(token);
 
     res.cookie('token', token, cookieConfig)

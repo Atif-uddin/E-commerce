@@ -51,13 +51,13 @@ export const adminLoginMiddleware = async (req, res, next) => {
 }
 
 
-export const getUserByIdMiddleware = async(req, res, next) =>{
+export const getUserByIdMiddleware = async (req, res, next) => {
     try {
-        const {userId} = req.validatedParams
+        const { userId } = req.validatedParams
 
         const user = await findUserById(userId)
 
-        if(!user){
+        if (!user) {
             return res.status(400).send({
                 success: false,
                 message: 'User not Found!'
@@ -76,19 +76,19 @@ export const getUserByIdMiddleware = async(req, res, next) =>{
 }
 
 
-export const updateUserByIdMiddleware = async(req, res, next) =>{
+export const updateUserByIdMiddleware = async (req, res, next) => {
     try {
-        const {userId} = req.validatedParams
+        const { userId } = req.validatedParams
 
         const user = await findUserById(userId)
 
-        if(!user){
+        if (!user) {
             return res.status(400).send({
                 success: false,
                 message: 'User not Found!'
             })
         }
-        if(user.role == 'admin'){
+        if (user.role == 'admin') {
             return res.status(400).send({
                 success: false,
                 message: 'Admin cannot be updated'
@@ -107,19 +107,19 @@ export const updateUserByIdMiddleware = async(req, res, next) =>{
 }
 
 
-export const deleteUserMiddleware = async(req, res, next) =>{
+export const deleteUserMiddleware = async (req, res, next) => {
     try {
-        const {userId} = req.validatedParams
+        const { userId } = req.validatedParams
 
         const user = await findUserById(userId)
 
-        if(!user){
+        if (!user) {
             return res.status(400).send({
                 success: false,
                 message: 'User not Found!'
             })
         }
-        if(user.role == 'admin'){
+        if (user.role == 'admin') {
             return res.status(400).send({
                 success: false,
                 message: 'Admin cannot be updated'
@@ -127,12 +127,40 @@ export const deleteUserMiddleware = async(req, res, next) =>{
         }
         req.targetUser = user
         next()
-        
+
     } catch (error) {
         console.log(error);
         return res.status(500).send({
             success: false,
             message: error.message || 'Internal server Error'
+        })
+    }
+}
+
+
+export const adminMiddleware = async (req, res, next) => {
+    try {
+        // console.log("REQ USER:", req.user)
+        // console.log("ROLE:", req.user.role)
+        if (!req.user) {
+            return res.status(400).send({
+                success: false,
+                message: 'Unauthorized! please login first..'
+            })
+        }
+        if (req.user.role != 'admin') {
+            return res.status(400).send({
+                success: false,
+                message: 'Access Denied! Admins Only.'
+            })
+        }
+        next()
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: error.message || 'Internal ,server Error'
         })
     }
 }

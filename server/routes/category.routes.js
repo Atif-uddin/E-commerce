@@ -3,6 +3,8 @@ import { createCategorySchema, getCategoryIdSchema, updateCategorySchema } from 
 import { validate } from '../middlewares/validate.middleware.js'
 import { createCategoryMiddleware, deleteCategoryMiddleware, updateCategoryMiddleware } from '../middlewares/category.middleware.js'
 import { createCategory, deleteCategory, getAllCategories, getCategoryById, updateCategory } from '../controllers/category.controller.js'
+import { authMiddleware } from '../middlewares/authMiddleware.js'
+import { adminMiddleware } from '../middlewares/admin.middleware.js'
 
 const categoryRouter = express.Router()
 
@@ -16,7 +18,7 @@ categoryRouter.get('/test',(req, res) =>{
 categoryRouter.get('/',getAllCategories)
 categoryRouter.get('/:categoryId',validate(getCategoryIdSchema, 'params'), getCategoryById)
 
-// categoryRouter.use(authMiddleware, adminMiddleware)
+categoryRouter.use(authMiddleware, adminMiddleware)
 
 categoryRouter.post('/',validate(createCategorySchema),createCategoryMiddleware, createCategory)
 

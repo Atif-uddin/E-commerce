@@ -1,39 +1,38 @@
 import { findUserByEmail, findUserByEmailAndDelete, findUserById } from "../services/user.service.js"
 import { validatePassword } from "../services/auth.service.js";
 import { validateJWTToken } from "../utils/jwt.js";
-import { success } from "zod";
 
 
 // console.log('hello');
 
 
-export const registerMiddleware = async(req, res, next)=>{
-    
+export const registerMiddleware = async (req, res, next) => {
+
     try {
-      const {fullname, email, password, phoneNumber} = req.validatedData || {}
+        const { fullname, email, password, phoneNumber } = req.validatedData || {}
 
-      const existingUser = await findUserByEmail(email)
-      console.log(existingUser);
-      
-    //   if(existingUser){
-    //     return res.status(400).send({
-    //         success: false,
-    //         message: "User Found"
-    //     })
-    //   }
+        const existingUser = await findUserByEmail(email)
+        console.log(existingUser);
 
-      if(existingUser && existingUser.status != 'pending'){
-        return res.status(404).send({
-            success: false,
-            message: 'User Already Exists'
-        })
-      }
-      if(existingUser && existingUser.status == 'pending'){
-        await findUserByEmailAndDelete(email)
-      }
+        //   if(existingUser){
+        //     return res.status(400).send({
+        //         success: false,
+        //         message: "User Found"
+        //     })
+        //   }
 
-      next()
-      
+        if (existingUser && existingUser.status != 'pending') {
+            return res.status(404).send({
+                success: false,
+                message: 'User Already Exists'
+            })
+        }
+        if (existingUser && existingUser.status == 'pending') {
+            await findUserByEmailAndDelete(email)
+        }
+
+        next()
+
     } catch (error) {
         console.log(error);
         return res.status(500).send({
@@ -43,24 +42,24 @@ export const registerMiddleware = async(req, res, next)=>{
     }
 }
 
-export const verifyEmailMiddleware = async(req, res, next)=>{
+export const verifyEmailMiddleware = async (req, res, next) => {
     try {
-        const {email, otp} = req.validatedData || {}
+        const { email, otp } = req.validatedData || {}
         // console.log('test1');
         console.log(email, otp);
-        
+
         const user = await findUserByEmail(email)
         console.log(user);
         // console.log('Hello');
-        
 
-        if(!user){
+
+        if (!user) {
             return res.status(400).send({
                 success: false,
                 message: 'User not Found !'
             })
         }
-        if(user.status == 'inActive'){
+        if (user.status == 'inActive') {
             return res.status(400).send({
                 success: false,
                 message: 'User is inactive'
@@ -72,7 +71,7 @@ export const verifyEmailMiddleware = async(req, res, next)=>{
         //         message: 'User not verified or registered yet'
         //     })
         // }
-        
+
         next()
 
     } catch (error) {
@@ -84,24 +83,24 @@ export const verifyEmailMiddleware = async(req, res, next)=>{
     }
 }
 
-export const userLoginMiddleware = async(req, res, next) =>{
+export const userLoginMiddleware = async (req, res, next) => {
     try {
-        const {email, password} = req.validatedData || {}
+        const { email, password } = req.validatedData || {}
 
         const user = await findUserByEmail(email)
-        if(!user){
+        if (!user) {
             return res.status(400).send({
                 success: false,
                 message: 'User not Found || Email is not Valid'
             })
         }
-        if(!user.isVerified){
+        if (!user.isVerified) {
             return res.status(400).send({
                 success: false,
                 message: 'Please verify your email first'
             })
         }
-        if(user.status == 'inActive'){
+        if (user.status == 'inActive') {
             return res.status(400).send({
                 success: false,
                 message: 'Account is inActive'
@@ -109,7 +108,7 @@ export const userLoginMiddleware = async(req, res, next) =>{
         }
 
         const isValid = await validatePassword(user._id, password)
-        if(!isValid){
+        if (!isValid) {
             return res.status(400).send({
                 success: false,
                 message: 'Invalid Credentials'
@@ -127,20 +126,20 @@ export const userLoginMiddleware = async(req, res, next) =>{
     }
 }
 
-export const forgotPasswordMiddleware = async(req, res, next) =>{
+export const forgotPasswordMiddleware = async (req, res, next) => {
     try {
-        const {email} = req.validatedData || {}
+        const { email } = req.validatedData || {}
         // console.log(email);
-        
+
         const user = await findUserByEmail(email)
-        
-        if(!user){
+
+        if (!user) {
             return res.status(400).send({
                 success: false,
                 message: 'User not Found!'
             })
         }
-        if(user.status != 'active'){
+        if (user.status != 'active') {
             return res.status(400).send({
                 success: false,
                 message: 'User is not active'
@@ -157,12 +156,12 @@ export const forgotPasswordMiddleware = async(req, res, next) =>{
     }
 }
 
-export const resetPasswordMiddleware = async(req, res, next) =>{
+export const resetPasswordMiddleware = async (req, res, next) => {
     try {
-        const {email, otp, password} = req.validatedData || {}
+        const { email, otp, password } = req.validatedData || {}
 
         const user = await findUserByEmail(email)
-        if(!user){
+        if (!user) {
             return res.status(400).send({
                 success: false,
                 message: 'User not Found'
@@ -179,24 +178,27 @@ export const resetPasswordMiddleware = async(req, res, next) =>{
     }
 }
 
-export const authMiddleware = async(req, res, next) =>{
+export const authMiddleware = async (req, res, next) => {
     try {
-        const token = req.cookies.token
+        const token = req.cookies.token || req.cookies.adminToken
         // console.log(req.cookies);
-        
-        // console.log(token);
-        
-        if(!token){
+
+        if (!token) {
             return res.status(401).send({
                 success: false,
                 message: 'Unauthorized!'
             })
         }
 
-        const id = await validateJWTToken(token)
+        const userId = await validateJWTToken(token)
 
-        const user = await findUserById(id)
-        if(!id){
+        const user = await findUserById(userId)
+
+        // const decoded = await validateJWTToken(token);
+
+        // const user = await User.findById(decoded._id);
+
+        if (!user) {
             return res.status(400).send({
                 success: false,
                 message: 'User not found!'
@@ -204,8 +206,10 @@ export const authMiddleware = async(req, res, next) =>{
         }
 
         req.user = user
+        // console.log(user)
+        console.log("TOKEN USER:", req.user.email)
         next()
-        
+
     } catch (error) {
         console.log(error);
         return res.status(500).send({

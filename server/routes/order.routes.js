@@ -4,6 +4,7 @@ import { cancelOrderSchema, createOrderSchema, getAllOrdersSchema, getOrderIdSch
 import { authMiddleware } from '../middlewares/authMiddleware.js'
 import { cancelOrderMiddleware, createOrderMiddleware, getOrderByIdMiddleware, updateOrderStatusMiddleware } from '../middlewares/order.middleware.js'
 import { cancelOrder, createOrder, getAllOrders, getAllOrdersAdmin, getOrderById, updateOrderStatusById } from '../controllers/order.controller.js'
+import { adminMiddleware } from '../middlewares/admin.middleware.js'
 
 const orderRouter = express.Router()
 
@@ -22,7 +23,7 @@ orderRouter.get('/:orderId',validate(getOrderIdSchema, 'params'), getOrderByIdMi
 orderRouter.put('/:orderId/cancel',validate(cancelOrderSchema, 'params'), cancelOrderMiddleware, cancelOrder)
 
 
-// orderRouter.use(adminMiddleware)
+orderRouter.use(adminMiddleware)
 orderRouter.get('/admin/all',validate(getAllOrdersSchema, 'query'), getAllOrdersAdmin)
 orderRouter.put('/admin/:orderId/status',
     validate(updateOrderStatusParamsSchema, 'params'),
