@@ -9,17 +9,12 @@ import { validateJWTToken } from "../utils/jwt.js";
 export const registerMiddleware = async (req, res, next) => {
 
     try {
+        console.log("REGISTER MIDDLEWARE HIT");
+        console.log(req.body);
         const { fullname, email, password, phoneNumber } = req.validatedData || {}
 
         const existingUser = await findUserByEmail(email)
         console.log(existingUser);
-
-        //   if(existingUser){
-        //     return res.status(400).send({
-        //         success: false,
-        //         message: "User Found"
-        //     })
-        //   }
 
         if (existingUser && existingUser.status != 'pending') {
             return res.status(404).send({

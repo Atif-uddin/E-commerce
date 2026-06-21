@@ -9,6 +9,7 @@ import { success } from "zod";
 
 export const registerUser = async (req, res) => {
     const { fullname, email, password, phoneNumber } = req.validatedData
+    console.log("BODY:", req.body);
     try {
         const user = await createUser({ fullname, email, password, phoneNumber })
         return res.status(200).send({
