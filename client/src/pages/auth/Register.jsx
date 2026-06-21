@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { registerSchema } from '../../validations/auth.validation'
 import { registerUser } from '../../api/auth.api'
+import { useNavigate } from 'react-router-dom'
 
 const Register = () => {
     const [loading, setLoading] = useState(false)
@@ -16,6 +17,8 @@ const Register = () => {
         password: '',
         phoneNumber: ''
     })
+    const navigate = useNavigate()
+
     const handleChange = (e) => {
         setFormData({
             ...formData, [e.target.name]: e.target.value
@@ -49,7 +52,11 @@ const Register = () => {
                 password : '',
                 phoneNumber : ''
             })
-            setLoading(false)
+
+            setTimeout(() => {
+                navigate('/verify-email')
+            },1500)
+
         } catch (error) {
             console.log(error);
             setMessage(error.response?.data?.message || 'Something Went Wrong!') 
@@ -57,8 +64,9 @@ const Register = () => {
                 message: error.response?.data?.message || 'something wrong!',
                 type: 'error'
             })
+        }finally{
+            setLoading(false)
         }
-
     }
 
 

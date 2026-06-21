@@ -6,11 +6,11 @@ export const registerUser = async(data) =>{
 }
 
 export const loginUser = async(data) =>{
-    const response = await api.post('/auth/login',data)
+    const response = await api.post('/users/login',data)
     return response.data
 }
 
-export const VerifyEmail = async(data) =>{
+export const verifyEmail = async(data) =>{
     const response = await api.post('/users/verify-email',data)
     return response.data
 }
