@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { loginSchema } from "../../validations/auth.validation";
 import { loginUser } from "../../api/auth.api";
+import { useAuth } from "../../context/AuthContext";
 
 const LoginUser = () => {
   const [loading, setLoading] = useState(false)
@@ -18,6 +19,8 @@ const LoginUser = () => {
   })
 
   const navigate = useNavigate()
+
+  const {login} = useAuth()
 
   const handleChange = (e) => {
     setFormData({
@@ -40,7 +43,7 @@ const LoginUser = () => {
       setLoading(true)
 
       const response = await loginUser(result.data)
-      console.log(response)
+      login(response.data)
 
       setAlert({
         message: response.message,
