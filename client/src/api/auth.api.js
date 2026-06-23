@@ -14,3 +14,8 @@ export const verifyEmail = async(data) =>{
     const response = await api.post('/users/verify-email',data)
     return response.data
 }
+
+export const logoutUser = async(data) =>{
+    const response = await api.post('/users/logout',data)
+    return response.data
+}

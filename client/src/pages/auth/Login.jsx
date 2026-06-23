@@ -44,7 +44,8 @@ const LoginUser = () => {
 
       const response = await loginUser(result.data)
       login(response.data)
-
+      console.log(response);
+      
       setAlert({
         message: response.message,
         type: 'success'
