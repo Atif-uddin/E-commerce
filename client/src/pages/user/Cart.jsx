@@ -1,26 +1,57 @@
 import { useState, useEffect } from "react";
 import { getCart } from "../../api/cart.api";
 
-const Cart = () =>{
+import { updateCartItem } from "../../api/cart.api";
+
+const Cart = () => {
     const [cart, setCart] = useState(null)
 
-    useEffect(() =>{
-        const fetchCart = async() =>{
+        const fetchCart = async () => {
             try {
                 const response = await getCart()
                 console.log(response);
 
                 setCart(response.data)
-                
+
             } catch (error) {
                 console.log(error)
             }
         }
+       
+    useEffect(() =>{
         fetchCart()
     },[])
+    
 
-    if(!cart){
+    if (!cart) {
         return <h1>Your Cart is Empty</h1>
+    }
+
+    const increaseQuantity = async (item) => {
+        try {
+            await updateCartItem(
+                item.product._id,
+                item.quantity + 1
+            )
+            fetchCart()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const decreaseQuantity = async (item) => {
+
+        if (item.quantity <= 1) return
+
+        try {
+            await updateCartItem(
+                item.product._id,
+                item.quantity - 1
+            )
+            fetchCart()
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -35,18 +66,46 @@ const Cart = () =>{
 
                     <div
                         key={item.product._id}
-                        className="border p-4 mb-4 rounded">
+                        className="flex items-center justify-between border p-4 rounded mb-4"
+                    >
 
-                        <h2>{item.product.name}</h2>
+                        <div className="flex items-center gap-4">
 
-                        <p>₹ {item.price}</p>
+                            <img
+                                src={item.product.images?.[0]?.url}
+                                alt={item.product.name}
+                                className="w-20 h-20 object-cover rounded"
+                            />
 
-                        <p>Qty: {item.quantity}</p>
+                            <div>
 
-                        <p>
-                            Total:
-                            ₹ {item.price * item.quantity}
-                        </p>
+                                <h2 className="font-semibold gap-2 ">
+                                    {item.product.name}
+                                </h2>
+
+                                <p>
+                                    ₹ {item.price}
+                                </p>
+
+                            </div>
+
+                            <div className="flex  items-center gap-3">
+
+                                <button onClick={() => decreaseQuantity(item)} className="border px-3 py-1">
+                                    -
+                                </button>
+
+                                <span>
+                                    {item.quantity}
+                                </span>
+
+                                <button onClick={() => increaseQuantity(item)} className="border px-3 py-1">
+                                    +
+                                </button>
+
+                            </div>
+
+                        </div>
 
                     </div>
 

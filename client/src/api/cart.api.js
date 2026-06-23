@@ -5,7 +5,7 @@ export const getCart = async() =>{
     return response.data
 }
 
-export const updateCartItem = async() =>{
+export const updateCartItem = async(productId, quantity) =>{
     const response = await api.put(`/cart/update/${productId}`,{quantity})
     return response.data
 }
