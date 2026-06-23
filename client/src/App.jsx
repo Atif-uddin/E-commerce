@@ -2,16 +2,30 @@ import React from 'react'
 import AppRoutes from './routes/AppRoutes'
 import { useAuth } from './context/AuthContext'
 import Loader from './components/common/Loader'
+import Navbar from './components/common/Navbar'
+import Footer from './components/common/Footer'
 
 const App = () => {
 
-  const {authLoading} = useAuth()
-  
-  if(authLoading){
+  const { authLoading } = useAuth()
+
+  if (authLoading) {
     return <Loader />
   }
 
-  return <AppRoutes />
+  return (
+    <div className='min-h-screen flex flex-col'>
+      <Navbar />
+
+      <main className='flex-1'>
+
+        <AppRoutes />
+
+      </main>
+
+      <Footer />
+    </div>
+  )
 }
 
 export default App
