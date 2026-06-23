@@ -6,6 +6,7 @@ import Register from '../pages/auth/Register'
 import VerifyEmail from '../pages/auth/VerifyEmail'
 import ProtectedRoute from './ProtectedRoutes'
 import ProductDetails from '../pages/user/ProductDetail'
+import Cart from '../pages/user/Cart'
 
 const AppRoutes = () => {
     return (
@@ -15,6 +16,16 @@ const AppRoutes = () => {
             <Route path='/register' element={<Register />} />
             <Route path='/verify-email' element={<VerifyEmail />} />
             <Route path='/products/:productId' element={<ProductDetails />} />
+
+            {/* Protected Routes */}
+            <Route
+                path="/cart"
+                element={
+                    <ProtectedRoute>
+                        <Cart />
+                    </ProtectedRoute>
+                }
+            />
         </Routes>
     )
 }

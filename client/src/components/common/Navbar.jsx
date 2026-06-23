@@ -46,6 +46,8 @@ const Navbar = () => {
                             <>
                                 <span> Welcome, {user.fullname} </span>
 
+                                <Link to="/cart"> Cart </Link>
+
                                 <button onClick={() => setIsProfileOpen(true)}>
                                     Profile
                                 </button>

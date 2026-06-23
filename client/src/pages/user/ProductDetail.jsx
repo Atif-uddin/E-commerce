@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 import { getProductById } from "../../api/product.api";
+import { addToCart } from "../../api/cart.api";
 
 const ProductDetails = () => {
 
@@ -9,6 +12,10 @@ const ProductDetails = () => {
 
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [message, setMessage] = useState('')
+    const navigate = useNavigate()
+
+    const { user } = useAuth()
 
     useEffect(() => {
 
@@ -43,6 +50,30 @@ const ProductDetails = () => {
 
     if (!product) {
         return <h1>Product Not Found</h1>;
+    }
+
+    const addToCartHandler = async () => {
+        if (!user) {
+            navigate('/login', {
+                state: {
+                    from: `/products/${product._id}`
+                }
+            });
+            return;
+        }
+        try {
+            const response = await addToCart({
+                productId: product._id,
+                quantity: 1
+            })
+            console.log(productId);
+
+            console.log(response);
+            setMessage(response.message)
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -85,10 +116,18 @@ const ProductDetails = () => {
                     </p>
 
                     <button
-                        className="mt-6 bg-blue-500 text-white px-5 py-3 rounded"
-                    >
+                        onClick={addToCartHandler}
+                        className="mt-6 bg-blue-500 text-white px-5 py-3 rounded">
                         Add To Cart
                     </button>
+
+                    {
+                        message && (
+                            <p className="text-green-500">
+                                {message}
+                            </p>
+                        )
+                    }
 
                 </div>
 
