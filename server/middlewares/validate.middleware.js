@@ -15,6 +15,7 @@ export const validate = (schema, source = "body") => {
         if (!result.success) {
             return res.status(400).send({
                 success: false,
+                message: result.error.issues[0].message,
                 errors: result.error.issues
             })
         }

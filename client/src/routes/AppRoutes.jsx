@@ -7,6 +7,7 @@ import VerifyEmail from '../pages/auth/VerifyEmail'
 import ProtectedRoute from './ProtectedRoutes'
 import ProductDetails from '../pages/user/ProductDetail'
 import Cart from '../pages/user/Cart'
+import Checkout from '../pages/user/Checkout'
 
 const AppRoutes = () => {
     return (
@@ -23,6 +24,15 @@ const AppRoutes = () => {
                 element={
                     <ProtectedRoute>
                         <Cart />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route 
+                path='/checkout'
+                element = {
+                    <ProtectedRoute> 
+                        <Checkout />
                     </ProtectedRoute>
                 }
             />

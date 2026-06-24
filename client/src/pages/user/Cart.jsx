@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { FaTrash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { getCart } from "../../api/cart.api";
 import { updateCartItem } from "../../api/cart.api";
@@ -9,6 +9,7 @@ import { clearCart } from "../../api/cart.api";
 
 const Cart = () => {
     const [cart, setCart] = useState(null)
+    const navigate = useNavigate()
 
     const fetchCart = async () => {
         try {
@@ -185,6 +186,7 @@ const Cart = () => {
                     </div>
 
                     <button
+                        onClick={() => navigate('/checkout')}
                         className="bg-blue-500 text-white px-6 py-3 rounded">
                         Proceed To Checkout
                     </button>
