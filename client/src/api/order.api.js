@@ -10,3 +10,13 @@ export const getAllOrders = async() =>{
     const response = await api.get('/orders')
     return response.data
 }
+
+export const getOrderById = async(orderId) =>{
+    const response = await api.get(`/orders/${orderId}`)
+    return response.data
+}
+
+export const cancelOrder = async(orderId) =>{
+    const response = await api.put(`/orders/${orderId}/cancel`)
+    return response.data
+}

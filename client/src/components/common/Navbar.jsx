@@ -48,6 +48,8 @@ const Navbar = () => {
 
                                 <Link to="/cart"> Cart </Link>
 
+                                <Link to= '/orders'> My Orders </Link>
+
                                 <button onClick={() => setIsProfileOpen(true)}>
                                     Profile
                                 </button>

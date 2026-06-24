@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { createOrder } from "../../api/order.api";
 import { getCart } from "../../api/cart.api";
@@ -67,6 +68,28 @@ const Checkout = () => {
         return <h1>Loading...</h1>
     }
 
+    if (cart.items.length === 0) {
+        return (
+            <div className="max-w-3xl mx-auto p-10 text-center">
+
+                <h1 className="text-3xl font-bold mb-4">
+                    Your Cart is Empty
+                </h1>
+
+                <p className="text-gray-500 mb-6">
+                    Add some products before proceeding to checkout.
+                </p>
+
+                <Link
+                    to="/"
+                    className="bg-blue-500 text-white px-6 py-3 rounded">
+                    Browse Products
+                </Link>
+
+            </div>
+        )
+    }
+
     const subtotal = cart?.totalAmount || 0;
 
     const gst = Math.round(subtotal * 0.18);
@@ -83,7 +106,7 @@ const Checkout = () => {
 
     return (
 
-        < div className="max-w-3xl mx-auto p-6" >
+        < div className="max-w-6xl mx-auto p-6" >
             <h1 className="text-3xl font-bold mb-6 mt-5">
                 Checkout
             </h1>
@@ -196,16 +219,32 @@ const Checkout = () => {
                     placeholder="Enter your complete shipping address..."
                     className="w-full border rounded p-3 resize-none" />
 
-                <button
-                    onClick={placeOrderHandler}
-                    disabled={loading}
-                    className="mt-5 bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700">
-                    {
-                        loading
-                            ? "Placing Order..."
-                            : "Place Order"
-                    }
-                </button>
+                <div className="sticky bottom-0 left-0 right-0 bg-white border-t shadow-lg ">
+                    <div className="max-w-6xl mx-auto flex items-center justify-between">
+
+                        <div>
+                            <p className="text-gray-500">
+                                Total Amount
+                            </p>
+
+                            <h2 className="text-2xl font-bold">
+                                ₹ {finalTotal}
+                            </h2>
+                        </div>
+
+                        <button
+                            onClick={() => placeOrderHandler()}
+                            disabled={loading}
+                            className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded">
+                            {
+                                loading
+                                    ? "Placing Order..."
+                                    : "Place Order"
+                            }
+                        </button>
+
+                    </div>
+                </div>
             </div>
         </div >
     );

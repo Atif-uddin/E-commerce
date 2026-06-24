@@ -8,6 +8,7 @@ import ProtectedRoute from './ProtectedRoutes'
 import ProductDetails from '../pages/user/ProductDetail'
 import Cart from '../pages/user/Cart'
 import Checkout from '../pages/user/Checkout'
+import Orders from '../pages/user/Orders'
 
 const AppRoutes = () => {
     return (
@@ -33,6 +34,15 @@ const AppRoutes = () => {
                 element = {
                     <ProtectedRoute> 
                         <Checkout />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path='/orders'
+                element = {
+                    <ProtectedRoute>
+                        <Orders />
                     </ProtectedRoute>
                 }
             />

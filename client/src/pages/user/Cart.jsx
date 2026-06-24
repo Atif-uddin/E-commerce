@@ -172,7 +172,7 @@ const Cart = () => {
 
             </div>
 
-            <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-4">
+            <div className="sticky bottom-0 left-0 right-0 bg-white border-t shadow-lg p-3">
                 <div className="max-w-6xl mx-auto flex items-center justify-between">
 
                     <div>
