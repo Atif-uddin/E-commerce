@@ -6,7 +6,7 @@ export const getAllProductsService = async (filters) => {
 
     const {
         page = 1,
-        limit = 10,
+        limit = 2,
         search,
         category,
         minPrice,

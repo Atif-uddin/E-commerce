@@ -15,6 +15,8 @@ const CategoryProducts = () => {
     const [loading, setLoading] = useState(true)
     const [search, setSearch] = useState('')
     const [sort, setSort] = useState('newest')
+    const [page, setPage] = useState(1)
+    const [pagination, setPagination] = useState(null)
 
     useEffect(() => {
         const fetchCategory = async () => {
@@ -38,8 +40,9 @@ const CategoryProducts = () => {
             try {
                 setLoading(true)
 
-                const response = await getAllProducts({ category: category._id, search, sort })
+                const response = await getAllProducts({ category: category._id, search, sort, page })
                 setProducts(response.data || [])
+                setPagination(response.pagination)
             } catch (error) {
                 console.log(error)
             } finally {
@@ -47,7 +50,11 @@ const CategoryProducts = () => {
             }
         }
         fetchProducts()
-    }, [category, search, sort])
+    }, [category, search, sort, page])
+
+    useEffect(() => {
+        setPage(1)
+    }, [search, sort, category])
 
     if (!category) {
         return (
@@ -95,8 +102,8 @@ const CategoryProducts = () => {
                 <select
                     value={sort}
                     onChange={(e) => setSort(e.target.value)}
-                    className=" border rounded-lg px-4 py-3">
-                        
+                    className=" border rounded-lg p-3">
+
                     <option value="newest">
                         Newest
                     </option>
@@ -140,6 +147,35 @@ const CategoryProducts = () => {
                             ))
                         }
                     </div>
+                )
+
+            }
+
+            {
+                pagination?.totalPages > 1 && (
+
+                    <div className="flex justify-center gap-3 mt-8">
+
+                        <button
+                            disabled={page === 1}
+                            onClick={() => setPage(page - 1)}
+                            className="border px-4 py-2 rounded disabled:opacity-50">
+                            Previous
+                        </button>
+
+                        <span className="px-4 py-2">
+                            Page {pagination.currentPage} of {pagination.totalPages}
+                        </span>
+
+                        <button
+                            disabled={page === pagination.totalPages}
+                            onClick={() => setPage(page + 1)}
+                            className="border px-4 py-2 rounded disabled:opacity-50">
+                            Next
+                        </button>
+
+                    </div>
+
                 )
             }
         </div>
