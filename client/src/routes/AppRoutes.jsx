@@ -10,6 +10,7 @@ import Cart from '../pages/user/Cart'
 import Checkout from '../pages/user/Checkout'
 import Orders from '../pages/user/Orders'
 import OrderDetails from '../pages/user/OrderDetails'
+import CategoryProducts from '../pages/user/CategoryProducts'
 
 const AppRoutes = () => {
     return (
@@ -19,6 +20,7 @@ const AppRoutes = () => {
             <Route path='/register' element={<Register />} />
             <Route path='/verify-email' element={<VerifyEmail />} />
             <Route path='/products/:productId' element={<ProductDetails />} />
+            <Route path='/category/:slug' element = {<CategoryProducts />} />
 
             {/* Protected Routes */}
             <Route

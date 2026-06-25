@@ -1,7 +1,7 @@
 import api from "./axiosInstance";
 
-export const getAllProducts = async() =>{
-    const response = await api.get('/products')
+export const getAllProducts = async(params = {}) =>{
+    const response = await api.get('/products',{params})
     return response.data
 }
 
