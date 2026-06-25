@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { getOrderById } from "../../api/order.api";
 import { useEffect } from "react";
+import { cancelOrder } from "../../api/order.api";
 
 const OrderDetails = () => {
 
@@ -10,21 +11,18 @@ const OrderDetails = () => {
 
     const { orderId } = useParams()
 
+    const fetchOrder = async () => {
+
+        const response = await getOrderById(orderId)
+        console.log(response);
+        console.log("ORDER:", response.data);
+        setOrder(response.data)
+
+    }
     useEffect(() => {
-        const fetchOrder = async () => {
-            
-            try {
-                const response = await getOrderById(orderId)
-                console.log(response);
-                console.log("ORDER:", response.data);
-                setOrder(response.data)
-            } catch (error) {
-                console.log(error);
-            }
-        }
         fetchOrder()
     }, [orderId])
-    
+
     console.log(order);
     if (!order) {
 
@@ -34,6 +32,52 @@ const OrderDetails = () => {
             </div>
         );
 
+    }
+
+    const getStatusColors = (status) => {
+
+        switch (status) {
+
+            case "pending":
+                return "bg-yellow-100 text-yellow-700";
+
+            case "processing":
+                return "bg-blue-100 text-blue-700";
+
+            case "shipped":
+                return "bg-purple-100 text-purple-700";
+
+            case "delivered":
+                return "bg-green-100 text-green-700";
+
+            case "cancelled":
+                return "bg-red-100 text-red-700";
+
+            default:
+                return "bg-gray-100 text-gray-700";
+        }
+
+    };
+
+    const cancelOrderHandler = async () => {
+
+        const confirmCancel = window.confirm(
+            "Are you sure you want to cancel this order?"
+        );
+
+        if (!confirmCancel) return
+
+        try {
+            const response = await cancelOrder(order._id)
+
+            alert(response.message)
+            await fetchOrder()
+
+        } catch (error) {
+            alert(
+                error.response?.data?.message || 'Someting went wrong'
+            )
+        }
     }
 
     return (
@@ -50,9 +94,16 @@ const OrderDetails = () => {
                     <strong>Order ID:</strong> {order._id}
                 </p>
 
-                <p>
-                    <strong>Order Status:</strong> {order.orderStatus}
-                </p>
+                <div className="flex items-center gap-3">
+
+                    <strong>Order Status:</strong>
+
+                    <span
+                        className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColors(order.orderStatus)}`}>
+                        {order.orderStatus.toUpperCase()}
+                    </span>
+
+                </div>
 
                 <p>
                     <strong>Payment Status:</strong> {order.paymentStatus}
@@ -62,6 +113,17 @@ const OrderDetails = () => {
                     <strong>Placed On:</strong>{" "}
                     {new Date(order.createdAt).toLocaleDateString()}
                 </p>
+                {
+                    order.orderStatus === "pending" && (
+
+                        <button
+                            onClick={cancelOrderHandler}
+                            className="mt-4 bg-red-500 text-white px-4 py-2 rounded">
+                            Cancel Order
+                        </button>
+
+                    )
+                }
 
             </div>
 
