@@ -137,7 +137,7 @@ const Cart = () => {
 
                             </div>
 
-                            <div className="flex  items-center gap-3">
+                            <div className="flex items-center  gap-4">
 
                                 <button onClick={() => decreaseQuantity(item)} className="border cursor-pointer px-3 py-1 rounded">
                                     -
@@ -162,7 +162,7 @@ const Cart = () => {
                 ))
             }
 
-            <div className="mt-6 text-xl font-bold flex gap-10">
+            <div className="mt-10 mb-5 text-xl font-bold flex gap-10">
                 Grand Total:
                 ₹ {cart.totalAmount}
 

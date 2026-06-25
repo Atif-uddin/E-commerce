@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import { getAllOrders } from "../../api/order.api";
 
@@ -44,23 +45,27 @@ const Orders = () => {
                 orders.map(order => (
                     <div
                         key={order._id}
-                        className="border rounded-lg p-4 mb-4 shadow-sm">
+                        className=" rounded-lg p-4 mb-4 shadow-lg">
+                        <Link
+                            to={`/orders/${order._id}`}
+                            className="block border rounded-lg p-4 mb-4 shadow-sm">
 
-                        <h2 className="font-bold">
-                            Order #{order._id.slice(-6)}
-                        </h2>
+                            <h2 className="font-bold">
+                                Order #{order._id.slice(-6)}
+                            </h2>
 
-                        <p>
-                            Status: {order.orderStatus}
-                        </p>
+                            <p>
+                                Status: {order.orderStatus}
+                            </p>
 
-                        <p>
-                            Total: ₹ {order.totalAmount}
-                        </p>
+                            <p>
+                                Total: ₹ {order.totalAmount}
+                            </p>
 
-                        <p>
-                            Items: {order.items.length}
-                        </p>
+                            <p>
+                                Items: {order.items.length}
+                            </p>
+                        </Link>
                     </div>
                 ))
             }

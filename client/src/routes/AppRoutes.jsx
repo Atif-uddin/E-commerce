@@ -9,6 +9,7 @@ import ProductDetails from '../pages/user/ProductDetail'
 import Cart from '../pages/user/Cart'
 import Checkout from '../pages/user/Checkout'
 import Orders from '../pages/user/Orders'
+import OrderDetails from '../pages/user/OrderDetails'
 
 const AppRoutes = () => {
     return (
@@ -29,10 +30,10 @@ const AppRoutes = () => {
                 }
             />
 
-            <Route 
+            <Route
                 path='/checkout'
-                element = {
-                    <ProtectedRoute> 
+                element={
+                    <ProtectedRoute>
                         <Checkout />
                     </ProtectedRoute>
                 }
@@ -40,9 +41,18 @@ const AppRoutes = () => {
 
             <Route
                 path='/orders'
-                element = {
+                element={
                     <ProtectedRoute>
                         <Orders />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path='/orders/:orderId'
+                element={
+                    <ProtectedRoute>
+                        <OrderDetails />
                     </ProtectedRoute>
                 }
             />
