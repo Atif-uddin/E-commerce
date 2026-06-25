@@ -14,6 +14,7 @@ const CategoryProducts = () => {
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(true)
     const [search, setSearch] = useState('')
+    const [sort, setSort] = useState('newest')
 
     useEffect(() => {
         const fetchCategory = async () => {
@@ -37,7 +38,7 @@ const CategoryProducts = () => {
             try {
                 setLoading(true)
 
-                const response = await getAllProducts({ category: category._id, search })
+                const response = await getAllProducts({ category: category._id, search, sort })
                 setProducts(response.data || [])
             } catch (error) {
                 console.log(error)
@@ -46,7 +47,7 @@ const CategoryProducts = () => {
             }
         }
         fetchProducts()
-    }, [category, search])
+    }, [category, search, sort])
 
     if (!category) {
         return (
@@ -67,7 +68,7 @@ const CategoryProducts = () => {
                         "https://placehold.co/100x100"
                     }
                     alt={category.name}
-                    className="w-16 h-16 rounded-full object-cover"/>
+                    className="w-16 h-16 rounded-full object-cover" />
 
                 <div>
 
@@ -81,15 +82,37 @@ const CategoryProducts = () => {
                 </div>
             </div>
 
-            <div className="mb-6">
+            <div className="flex flex-col md:flex-row gap-4 mb-6">
 
                 <input
                     type="text"
                     placeholder={`Search in ${category.name}...`}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="w-full border rounded-lg px-4 py-3"
+                    className="flex-1 border rounded-lg px-4 py-3"
                 />
+
+                <select
+                    value={sort}
+                    onChange={(e) => setSort(e.target.value)}
+                    className=" border rounded-lg px-4 py-3">
+                        
+                    <option value="newest">
+                        Newest
+                    </option>
+
+                    <option value="oldest">
+                        Oldest
+                    </option>
+
+                    <option value="price_asc">
+                        Price Low → High
+                    </option>
+
+                    <option value="price_desc">
+                        Price High → Low
+                    </option>
+                </select>
 
             </div>
             {

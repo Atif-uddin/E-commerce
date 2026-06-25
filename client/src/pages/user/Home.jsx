@@ -76,8 +76,7 @@ const Home = () => {
                 onClick={() =>
                   navigate(`/category/${category.slug}`)
                 }
-                className="flex flex-col items-center cursor-pointer min-w-[90px]"
-              >
+                className="flex flex-col items-center cursor-pointer min-w-90px">
 
                 <img
                   src={
