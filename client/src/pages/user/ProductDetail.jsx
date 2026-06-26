@@ -7,6 +7,7 @@ import { useAuth } from "../../context/AuthContext";
 import { getProductById } from "../../api/product.api";
 import { addToCart } from "../../api/cart.api";
 import { addToWishlist } from "../../api/wishlist.api";
+import { useWishlist } from "../../context/WishlistContext";
 
 const ProductDetails = () => {
 
@@ -16,6 +17,7 @@ const ProductDetails = () => {
     const [loading, setLoading] = useState(true);
     const [message, setMessage] = useState('')
     const navigate = useNavigate()
+    const {fetchWishlistCount} = useWishlist()
 
     const { user } = useAuth()
 
@@ -82,6 +84,7 @@ const ProductDetails = () => {
         try {
             const response = await addToWishlist(product._id);
             setMessage(response.message)
+            fetchWishlistCount()
         } catch (error) {
             console.log("FULL ERROR:", error);
             console.log("STATUS:", error.response?.status);

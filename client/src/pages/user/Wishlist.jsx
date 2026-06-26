@@ -2,13 +2,16 @@ import { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom";
 
 import { clearWishlist, getWishlist, moveToCart, removeFromWishlist } from "../../api/wishlist.api"
+import { useWishlist } from "../../context/WishlistContext";
 
 const Wishlist = () => {
 
+    const {fetchWishlistCount} = useWishlist()
     const [wishlist, setWishlist] = useState([])
     const [message, setMessage] = useState('')
     const [itemsMoved, setItemsMoved] = useState(false)
     const navigate = useNavigate()
+
 
     const fetchWishlist = async () => {
         try {
@@ -29,6 +32,7 @@ const Wishlist = () => {
 
             setMessage(response.message)
 
+            fetchWishlistCount()
             fetchWishlist()
         } catch (error) {
             setMessage(error.response?.data?.message || 'Something went wrong')
@@ -57,11 +61,12 @@ const Wishlist = () => {
         if (!confirmClear) return
 
         try {
+
             const response = await clearWishlist()
-
             setMessage(response.message)
-
+            fetchWishlistCount()
             await fetchWishlist()
+
         } catch (error) {
             setMessage(error.response?.data?.message || 'Something went Wrong')
         }

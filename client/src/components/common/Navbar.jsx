@@ -1,11 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import { logoutUser } from "../../api/auth.api";
+import { useWishlist } from "../../context/WishlistContext";
 import { useState } from "react";
 import ProfileSidebar from "../user/ProfileSidebar";
 
-const Navbar = () => {
+import { useAuth } from "../../context/AuthContext";
+import { logoutUser } from "../../api/auth.api";
 
+const Navbar = () => {
+    const { wishlistCount } = useWishlist()
     const { user, logout } = useAuth();
     const [isProfileOpen, setIsProfileOpen] = useState(false)
     const navigate = useNavigate()
@@ -50,12 +52,35 @@ const Navbar = () => {
 
                                 <Link to="/wishlist" className="hover:text-blue-600">
                                     Wishlist
+                                    {
+                                        wishlistCount > 0 && (
+
+                                            <span
+                                                className="
+                                                    absolute
+                                                    top-1
+                                                    right-40
+                                                    bg-red-500
+                                                    text-white
+                                                    rounded-full
+                                                    w-5
+                                                    h-5
+                                                    text-xs
+                                                    flex
+                                                    items-center
+                                                    justify-center"
+                                            >
+                                                {wishlistCount}
+                                            </span>
+
+                                        )
+                                    }
                                 </Link>
 
                                 <Link to='/orders' className="hover:text-blue-600"> My Orders </Link>
 
                                 <button className="hover:text-blue-600"
-                                onClick={() => setIsProfileOpen(true)}>
+                                    onClick={() => setIsProfileOpen(true)}>
                                     Profile
                                 </button>
                             </>
