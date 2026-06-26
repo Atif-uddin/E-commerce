@@ -1,11 +1,17 @@
 import { Link } from "react-router-dom";
+import { addToWishlist } from "../../api/wishlist.api";
 
-const ProductCard = ({product}) =>{
-    
-    return(
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+const ProductCard = ({ product }) => {
+
+    const navigate = useNavigate()
+
+    return (
         <div className="border rounded-lg p-4 shadow">
-            <img src={product.images?.[0]?.url} 
-                alt={product.images?.[0]?.url || product.name }
+            <img src={product.images?.[0]?.url}
+                alt={product.images?.[0]?.url || product.name}
                 className="w-fit h-48 object-cover rounded"
             />
 
@@ -18,14 +24,14 @@ const ProductCard = ({product}) =>{
             </p>
 
             <p className="font-bold text-green-600">
-                {product.price}
+                ₹ {product.price}
             </p>
 
-            <p> {product.stock} </p>
+            <p> {product.stock} left in stock</p>
 
             <Link to={`/products/${product._id}`}
-            className="inline-block mt-3 bg-blue-500 text-white px-3 py-2 rounded">
-                View Details
+                className="inline-block mt-3 bg-blue-500 text-white px-3 py-2 rounded">
+                Buy now
             </Link>
         </div>
     )

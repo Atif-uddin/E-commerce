@@ -154,7 +154,7 @@ const CategoryProducts = () => {
             {
                 pagination?.totalPages > 1 && (
 
-                    <div className="flex justify-center gap-3 mt-8">
+                    <div className="flex justify-center mt-4">
 
                         <button
                             disabled={page === 1}

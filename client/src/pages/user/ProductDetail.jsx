@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { FaHeart } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 
 import { getProductById } from "../../api/product.api";
 import { addToCart } from "../../api/cart.api";
+import { addToWishlist } from "../../api/wishlist.api";
 
 const ProductDetails = () => {
 
@@ -76,6 +78,25 @@ const ProductDetails = () => {
         }
     }
 
+    const addToWishlistHandler = async () => {
+        try {
+            const response = await addToWishlist(product._id);
+            setMessage(response.message)
+        } catch (error) {
+            console.log("FULL ERROR:", error);
+            console.log("STATUS:", error.response?.status);
+            console.log("DATA:", error.response?.data);
+            if (error.response?.status === 401) {
+                navigate("/login");
+                return;
+            }
+            setMessage(
+                error.response?.data?.message ||
+                "Something went wrong"
+            );
+        }
+    };
+
     return (
         <div className="max-w-6xl mx-auto p-5">
 
@@ -104,7 +125,7 @@ const ProductDetails = () => {
                     </p>
 
                     <p className="mt-4">
-                        Stock: {product.stock}
+                        Stock: {product.stock} left in stock
                     </p>
 
                     <p className="mt-4">
@@ -119,6 +140,12 @@ const ProductDetails = () => {
                         onClick={addToCartHandler}
                         className="mt-6 bg-blue-500 text-white px-5 py-3 rounded">
                         Add To Cart
+                    </button>
+
+                    <button
+                        onClick={addToWishlistHandler}
+                        className=" top-2 right-2 bg-white rounded-full p-2 shadow hover:scale-110 transition cursor-pointer">
+                        <FaHeart className="text-red-500" />
                     </button>
 
                     {

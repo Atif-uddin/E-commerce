@@ -11,6 +11,7 @@ import Checkout from '../pages/user/Checkout'
 import Orders from '../pages/user/Orders'
 import OrderDetails from '../pages/user/OrderDetails'
 import CategoryProducts from '../pages/user/CategoryProducts'
+import Wishlist from '../pages/user/Wishlist'
 
 const AppRoutes = () => {
     return (
@@ -55,6 +56,15 @@ const AppRoutes = () => {
                 element={
                     <ProtectedRoute>
                         <OrderDetails />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route 
+                path='/wishlist'
+                element = {
+                    <ProtectedRoute>
+                        <Wishlist />
                     </ProtectedRoute>
                 }
             />

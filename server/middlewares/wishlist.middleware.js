@@ -18,11 +18,11 @@ export const addToWishlistMiddleware = async (req, res, next) => {
             })
         }
         const wishlist = await findWishlistByUserId(userId)
-        console.log(wishlist.products);
+        console.log(wishlist);
         console.log(productId);
 
         if (wishlist && wishlist.products.some(
-            item => item.toString() == productId)) {
+            item => item.toString() == productId.toString())) {
             return res.status(400).send({
                 success: false,
                 message: 'Product already exists in Wishlist!'

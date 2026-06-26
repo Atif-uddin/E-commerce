@@ -135,8 +135,13 @@ const Cart = () => {
                                     ₹ {item.price}
                                 </p>
 
+                                <p>
+                                    {item.quantity}
+                                </p>
+
                             </div>
 
+                        </div>
                             <div className="flex items-center  gap-4">
 
                                 <button onClick={() => decreaseQuantity(item)} className="border cursor-pointer px-3 py-1 rounded">
@@ -157,7 +162,6 @@ const Cart = () => {
                                     <FaTrash size={18} />
                                 </button>
                             </div>
-                        </div>
                     </div>
                 ))
             }

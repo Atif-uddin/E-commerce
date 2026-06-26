@@ -38,7 +38,7 @@ const Navbar = () => {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <Link to="/">
+                    <Link to="/" className="hover:text-blue-600">
                         Home
                     </Link>
                     {
@@ -46,19 +46,24 @@ const Navbar = () => {
                             <>
                                 <span> Welcome, {user.fullname} </span>
 
-                                <Link to="/cart"> Cart </Link>
+                                <Link to="/cart" className="hover:text-blue-600"> Cart </Link>
 
-                                <Link to= '/orders'> My Orders </Link>
+                                <Link to="/wishlist" className="hover:text-blue-600">
+                                    Wishlist
+                                </Link>
 
-                                <button onClick={() => setIsProfileOpen(true)}>
+                                <Link to='/orders' className="hover:text-blue-600"> My Orders </Link>
+
+                                <button className="hover:text-blue-600"
+                                onClick={() => setIsProfileOpen(true)}>
                                     Profile
                                 </button>
                             </>
                         ) : (
                             <>
-                                <Link to="/login"> Login </Link>
+                                <Link to="/login" className="hover:text-blue-600"> Login </Link>
 
-                                <Link to="/register"> Register </Link>
+                                <Link to="/register" className="hover:text-blue-600"> Register </Link>
                             </>
                         )
                     }

@@ -11,15 +11,18 @@ const Home = () => {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState([])
+  const [page, setPage] = useState(1)
+  const [pagination, setPagination] = useState('null')
   const navigate = useNavigate()
 
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await getAllProducts({ search })
+        const response = await getAllProducts({ search, page })
         console.log(response);
         setProducts(response.data || [])
+        setPagination(response.pagination)
       } catch (error) {
         console.log(error);
       } finally {
@@ -27,7 +30,7 @@ const Home = () => {
       }
     }
     fetchProducts()
-  }, [search])
+  }, [search, page])
 
 
   useEffect(() => {
@@ -113,6 +116,34 @@ const Home = () => {
           ))
         }
       </div>
+
+      {
+        pagination?.totalPages > 1 && (
+
+          <div className="flex justify-center mt-4">
+
+            <button
+              disabled={page === 1}
+              onClick={() => setPage(page - 1)}
+              className="border px-4 py-2 rounded disabled:opacity-50">
+              Previous
+            </button>
+
+            <span className="px-4 py-2">
+              Page {pagination.currentPage} of {pagination.totalPages}
+            </span>
+
+            <button
+              disabled={page === pagination.totalPages}
+              onClick={() => setPage(page + 1)}
+              className="border px-4 py-2  rounded disabled:opacity-50">
+              Next
+            </button>
+
+          </div>
+
+        )
+      }
     </div>
   )
 }
