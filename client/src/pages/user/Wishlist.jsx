@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom";
 
-import { getWishlist, moveToCart, removeFromWishlist } from "../../api/wishlist.api"
+import { clearWishlist, getWishlist, moveToCart, removeFromWishlist } from "../../api/wishlist.api"
 
 const Wishlist = () => {
 
@@ -45,6 +45,25 @@ const Wishlist = () => {
 
         } catch (error) {
             setMessage(error.response?.data?.message || 'Something went wrong')
+        }
+    }
+
+    const clearWishlistHandler = async () => {
+
+        const confirmClear = window.confirm(
+            'Are you sure you want to clear your Wishlist'
+        )
+
+        if (!confirmClear) return
+
+        try {
+            const response = await clearWishlist()
+
+            setMessage(response.message)
+
+            await fetchWishlist()
+        } catch (error) {
+            setMessage(error.response?.data?.message || 'Something went Wrong')
         }
     }
 
@@ -107,9 +126,22 @@ const Wishlist = () => {
 
         <div className="max-w-6xl mx-auto p-6">
 
-            <h1 className="text-3xl font-bold mb-6">
-                My Wishlist
-            </h1>
+            <div className="flex justify-between items-center mb-6">
+
+                <h1 className="text-3xl font-bold">
+                    My Wishlist
+                </h1>
+                {
+                    wishlist.length > 1 && (
+                        <button
+                            onClick={clearWishlistHandler}
+                            className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg">
+                            Clear Wishlist
+                        </button>
+                    )
+                }
+
+            </div>
 
             {
                 wishlist.map(product => (
@@ -156,11 +188,11 @@ const Wishlist = () => {
                 ))
             }
             <div className="sticky bottom-0 left-0 right-0 bg-white shadow-lg p-3 flex">
-                <div className="max-w-6xl mx-auto flex items-center justify-between">
+                <div className="max-w-6xl mx-auto flex items-center justify-between gap-5">
 
                     <button
                         onClick={moveToCartHandler}
-                        className="bg-blue-500 text-white px-6 py-3 rounded">
+                        className="bg-blue-500 text-white px-5 py-2 rounded">
                         Move to Cart
                     </button>
 
