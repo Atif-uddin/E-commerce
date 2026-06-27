@@ -20,7 +20,7 @@ const LoginUser = () => {
 
   const navigate = useNavigate()
 
-  const {login} = useAuth()
+  const { login } = useAuth()
 
   const handleChange = (e) => {
     setFormData({
@@ -45,7 +45,13 @@ const LoginUser = () => {
       const response = await loginUser(result.data)
       login(response.data)
       console.log(response);
-      
+
+      if (response.data.role == "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/");
+      }
+
       setAlert({
         message: response.message,
         type: 'success'
