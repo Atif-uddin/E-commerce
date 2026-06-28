@@ -1,6 +1,6 @@
-import { useEffect } from "react";
 
-const CategoryTable = ({ category, loading, onEdit}) => {
+
+const CategoryTable = ({ category, loading, onEdit, onDelete }) => {
 
     if (loading) {
         return (
@@ -24,7 +24,7 @@ const CategoryTable = ({ category, loading, onEdit}) => {
         );
     }
 
-
+    
     return (
 
         <div className="bg-white rounded-xl shadow overflow-hidden">
@@ -99,8 +99,14 @@ const CategoryTable = ({ category, loading, onEdit}) => {
                                         </button>
 
                                         <button
+                                            onClick={() => onDelete(category)}
+                                            disabled={loading}
                                             className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition">
-                                            Delete
+                                            {
+                                                loading
+                                                    ? "Deleting..."
+                                                    : "Delete"
+                                            }
                                         </button>
                                     </div>
                                 </td>

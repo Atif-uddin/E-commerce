@@ -3,6 +3,7 @@ import { getAllCategories } from "../../api/category.api";
 
 import CategoryTable from "../../components/admin/CategoryTable";
 import CategoryModal from "../../components/admin/CategoryModal";
+import DeleteModal  from "../../components/admin/DeleteModal";
 
 const Categories = () => {
 
@@ -10,6 +11,8 @@ const Categories = () => {
     const [category, setCategory] = useState([])
     const [openModal, setOpenModal] = useState(false)
     const [selectedCategory, setSelectedCategory] = useState(null)
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [selectedDeleteCategory, setSelectedDeleteCategory] = useState(null);
 
     const openCreateModal = () => {
         setSelectedCategory(null);
@@ -19,6 +22,13 @@ const Categories = () => {
     const openEditModal = (category) => {
         setSelectedCategory(category);
         setOpenModal(true);
+    };
+
+    const openDeleteModal = (category) => {
+        console.log("Delete clicked:", category);
+
+        setSelectedDeleteCategory(category);
+        setDeleteModal(true);
     };
 
     const fetchCategories = async () => {
@@ -61,14 +71,22 @@ const Categories = () => {
             <CategoryTable
                 category={category}
                 loading={loading}
-                onEdit = {openEditModal}
+                onEdit={openEditModal}
+                onDelete={openDeleteModal}
             />
 
             <CategoryModal
                 isOpen={openModal}
                 onClose={() => setOpenModal(false)}
                 fetchCategories={fetchCategories}
-                selectedCategory = {selectedCategory}
+                selectedCategory={selectedCategory}
+            />
+
+            <DeleteModal
+                isOpen={deleteModal}
+                onClose={() => setDeleteModal(false)}
+                category={selectedDeleteCategory}
+                fetchCategories={fetchCategories}
             />
         </div>
     );
