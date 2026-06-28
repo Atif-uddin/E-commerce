@@ -61,10 +61,6 @@ const LoginUser = () => {
         email: '',
         password: ''
       })
-
-      setTimeout(() => {
-        navigate('/')
-      }, 1500)
     } catch (error) {
       console.log("LOGIN ERROR:", error.response?.data)
 
