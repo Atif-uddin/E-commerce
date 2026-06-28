@@ -1,15 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-import { createCategory } from "../../api/category.api";
+import { createCategory, updateCategory } from "../../api/category.api";
 
-const CategoryModal = ({ isOpen, onClose, fetchCategories }) => {
+
+const CategoryModal = ({ isOpen, onClose, fetchCategories, selectedCategory }) => {
 
     const [loading, setLoading] = useState(false)
+    const [message, setMessage] = useState('')
+    const [error, setError] = useState('')
     const [formData, setFormData] = useState({
         name: "",
         description: "",
         images: ""
     });
+
+    useEffect(() => {
+        console.log("Selected Category:", selectedCategory);
+
+        if (selectedCategory) {
+            setFormData({
+                name: selectedCategory.name,
+                description: selectedCategory.description || "",
+                images: selectedCategory.images?.[0]?.url || ""
+            });
+        } else {
+            setFormData({
+                name: "",
+                description: "",
+                images: ""
+            });
+        }
+    }, [selectedCategory]);
+
 
     const handleChange = (e) => {
         setFormData({
@@ -21,34 +43,46 @@ const CategoryModal = ({ isOpen, onClose, fetchCategories }) => {
 
     const handleSubmit = async (e) => {
 
+        setMessage("");
+        setError("");
         e.preventDefault();
 
         try {
+
             setLoading(true);
+
             const payload = {
                 name: formData.name,
                 description: formData.description,
                 images: formData.images
-                    ? [{
-                        url: formData.images,
-                        alt: formData.name
-                    }] : []
+                    ? [
+                        {
+                            url: formData.images,
+                            alt: formData.name
+                        }
+                    ]
+                    : []
             };
 
-            const response = await createCategory(payload);
+            if (selectedCategory) {
 
-            alert(response.message);
+                await updateCategory(
+                    selectedCategory._id,
+                    payload
+                );
+                setMessage("Category updated successfully!");
+            } else {
+                await createCategory(payload);
+                setMessage("Category created successfully!");
+            }
 
             fetchCategories();
-            setFormData({
-                name: "",
-                description: "",
-                images: ""
-            });
+            setTimeout(() => {
+                onClose();
+            }, 1000);
 
-            onClose();
         } catch (error) {
-            alert(
+            setError(
                 error.response?.data?.message ||
                 "Something went wrong"
             );
@@ -58,6 +92,7 @@ const CategoryModal = ({ isOpen, onClose, fetchCategories }) => {
 
     };
 
+
     return (
 
         <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
@@ -66,7 +101,7 @@ const CategoryModal = ({ isOpen, onClose, fetchCategories }) => {
 
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-bold">
-                        Add Category
+                        {selectedCategory ? "Edit Category" : "Add Category"}
                     </h2>
 
                     <button
@@ -131,6 +166,22 @@ const CategoryModal = ({ isOpen, onClose, fetchCategories }) => {
 
                     </div>
 
+                    {message && (
+                        <div className="mb-4 rounded-lg border border-green-200 bg-green-50 px-4 py-3">
+                            <p className="text-green-700 font-medium">
+                                {message}
+                            </p>
+                        </div>
+                    )}
+
+                    {error && (
+                        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
+                            <p className="text-red-700 font-medium">
+                                {error}
+                            </p>
+                        </div>
+                    )}
+
                     <div className="flex justify-end gap-3">
 
                         <button
@@ -144,7 +195,12 @@ const CategoryModal = ({ isOpen, onClose, fetchCategories }) => {
                             type="submit"
                             disabled={loading}
                             className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                            {loading ? "Creating..." : "Add Category"}
+                            {
+                                loading
+                                    ? (
+                                        selectedCategory ? "Updating..." : "Creating...")
+                                    : (selectedCategory ? "Update Category" : "Add Category")
+                            }
                         </button>
                     </div>
                 </form>

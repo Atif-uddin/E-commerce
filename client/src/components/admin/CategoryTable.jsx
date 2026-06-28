@@ -1,4 +1,6 @@
-const CategoryTable = ({ category, loading }) => {
+import { useEffect } from "react";
+
+const CategoryTable = ({ category, loading, onEdit}) => {
 
     if (loading) {
         return (
@@ -21,6 +23,7 @@ const CategoryTable = ({ category, loading }) => {
             </div>
         );
     }
+
 
     return (
 
@@ -90,6 +93,7 @@ const CategoryTable = ({ category, loading }) => {
 
                                     <div className="flex justify-center gap-3">
                                         <button
+                                            onClick={() => onEdit(category)}
                                             className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg transition">
                                             Edit
                                         </button>

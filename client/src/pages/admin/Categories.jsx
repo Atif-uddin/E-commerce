@@ -6,9 +6,20 @@ import CategoryModal from "../../components/admin/CategoryModal";
 
 const Categories = () => {
 
-    const [loading, setLoading] = useState([])
-    const [category, setCategory] = useState(true)
+    const [loading, setLoading] = useState(true)
+    const [category, setCategory] = useState([])
     const [openModal, setOpenModal] = useState(false)
+    const [selectedCategory, setSelectedCategory] = useState(null)
+
+    const openCreateModal = () => {
+        setSelectedCategory(null);
+        setOpenModal(true);
+    };
+
+    const openEditModal = (category) => {
+        setSelectedCategory(category);
+        setOpenModal(true);
+    };
 
     const fetchCategories = async () => {
         try {
@@ -40,7 +51,7 @@ const Categories = () => {
                 </h1>
 
                 <button
-                    onClick={() => setOpenModal(true)}
+                    onClick={openCreateModal}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg transition">
                     + Add Category
                 </button>
@@ -50,12 +61,14 @@ const Categories = () => {
             <CategoryTable
                 category={category}
                 loading={loading}
+                onEdit = {openEditModal}
             />
 
             <CategoryModal
                 isOpen={openModal}
                 onClose={() => setOpenModal(false)}
                 fetchCategories={fetchCategories}
+                selectedCategory = {selectedCategory}
             />
         </div>
     );
