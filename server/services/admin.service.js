@@ -34,6 +34,8 @@ export const getDashboardService = async () => {
 
     const pendingOrders = await Order.countDocuments({ orderStatus: 'pending' })
 
+    const completedOrders = await Order.countDocuments({ orderStatus: 'delivered'})
+
     const revenueData = await Order.aggregate([
         {
             $match: {
@@ -56,6 +58,7 @@ export const getDashboardService = async () => {
         totalProducts,
         totalOrders,
         pendingOrders,
+        completedOrders,
         totalRevenue
     }
 }

@@ -18,7 +18,7 @@ export const findCategoryByName = async (name) => {
 }
 
 export const getAllCategoryService = async () => {
-    const categories = await Category.find({ isActive: true }).select('-__v -createdAt -updatedAt')
+    const categories = await Category.find({ isActive: true }).select('-__v')
     console.log(categories);
 
     return categories
