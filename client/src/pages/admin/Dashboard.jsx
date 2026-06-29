@@ -31,13 +31,19 @@ const Dashboard = () => {
     }, [])
 
     if (!dashboard) {
-        return <h2 className="flex justify-center">Loading Dashboard...</h2>
+        return (
+            <div className="flex justify-center py-10">
+                <h2 className="text-lg font-semibold">
+                    Loading Dashboard...
+                </h2>
+            </div>
+        );
     }
     return (
         <div className="p-6">
 
             <h1 className="text-3xl font-bold">
-                Admin Dashboard
+                Dashboard
             </h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">

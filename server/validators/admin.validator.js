@@ -21,7 +21,7 @@ export const getUserByIdSchema = z.object({
 });
 
 export const updateUserByIdBodySchema = z.object({
-    status: z.enum(['active','inactive','pending'])
+    status: z.enum(['active','inActive','pending'])
 });
 
 export const updateUserByIdParamsSchema = z.object({
