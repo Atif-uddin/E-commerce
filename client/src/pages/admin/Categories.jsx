@@ -3,7 +3,7 @@ import { getAllCategories } from "../../api/category.api";
 
 import CategoryTable from "../../components/admin/CategoryTable";
 import CategoryModal from "../../components/admin/CategoryModal";
-import DeleteModal  from "../../components/admin/DeleteModal";
+import DeleteModal from "../../components/admin/DeleteModal";
 
 const Categories = () => {
 
@@ -29,6 +29,21 @@ const Categories = () => {
 
         setSelectedDeleteCategory(category);
         setDeleteModal(true);
+    };
+
+    const deleteHandler = async () => {
+        try {
+            setLoading(true);
+            await deleteCategory(selectedDeleteCategory._id);
+            fetchCategories();
+            setDeleteModal(false);
+            setSelectedDeleteCategory(null);
+
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const fetchCategories = async () => {
@@ -84,9 +99,11 @@ const Categories = () => {
 
             <DeleteModal
                 isOpen={deleteModal}
+                title="Delete Category"
+                message={`Are you sure you want to delete "${selectedDeleteCategory?.name}"?`}
+                onConfirm={deleteHandler}
                 onClose={() => setDeleteModal(false)}
-                category={selectedDeleteCategory}
-                fetchCategories={fetchCategories}
+                loading={loading}
             />
         </div>
     );

@@ -54,11 +54,16 @@ export const getProductIdSchema = z.object({
 
 
 export const updateProductSchema = z.object({
-    
+
     name: z.string().trim().min(3).max(100).optional(),
     description: z.string().min(10).optional(),
     price: z.number().min(0).optional(),
-    images: z.array(z.string().url()).optional(),
+    images: z.array(
+        z.object({
+            url: z.string().url("Invalid image URL"),
+            alt: z.string().optional()
+        })
+    ).optional(),
     stock: z.number().min(0).optional(),
     brand: z.string().trim().optional(),
     category: z.string().regex(
