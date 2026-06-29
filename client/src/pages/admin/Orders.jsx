@@ -33,14 +33,21 @@ const Orders = () => {
         fetchOrders()
     }, [])
 
-    const openDetailsModal = () => {
-        setDetailsModal(false)
-        setStatusModal(true)
+    const openDetailsModal = (order) => {
+        setDetailsModal(true)
+        setSelectedOrders(order)
+        // setStatusModal(true)
     }
 
     const openStatusModal = (order) => {
-        setSelectedOrder(order);
+        setSelectedOrders(order);
         setStatusModal(true);
+    };
+
+    const handleStatusUpdated = () => {
+        setStatusModal(false);
+        setDetailsModal(false);
+        setSelectedOrders(null);
     };
 
     return (
@@ -66,6 +73,7 @@ const Orders = () => {
                 isOpen={statusModal}
                 onClose={() => setStatusModal(false)}
                 order={selectedOrders}
+                onStatusUpdated={handleStatusUpdated}
                 fetchOrders={fetchOrders}
             />
         </div>

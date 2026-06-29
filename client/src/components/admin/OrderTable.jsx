@@ -55,11 +55,9 @@ const OrderTable = ({ orders, loading, onView }) => {
                         
                     <tr
                         key={order._id}
-                        className="border-t hover:bg-gray-50 transition"
-                    >
+                        className="border-t hover:bg-gray-50 transition">
 
                         <td className="p-4">
-
                             <img
                                 src={
                                     order.items?.[0]?.product?.images?.[0]?.url ||
@@ -68,11 +66,9 @@ const OrderTable = ({ orders, loading, onView }) => {
                                 alt={order.items?.[0]?.product?.name}
                                 className="w-14 h-14 rounded-lg object-cover"
                             />
-
                         </td>
 
                         <td className="p-4">
-
                             <p className="font-semibold">
                                 {order.user?.fullname || 'Unknown User'}
                             </p>
@@ -84,19 +80,14 @@ const OrderTable = ({ orders, loading, onView }) => {
                         </td>
 
                         <td className="p-4">
-
                             {order.items.length} Item(s)
-
                         </td>
 
                         <td className="p-4 font-semibold">
-
                             ₹ {order.totalAmount}
-
                         </td>
 
                         <td className="p-4">
-
                             <span
                                 className={`
                                         px-3
@@ -108,11 +99,9 @@ const OrderTable = ({ orders, loading, onView }) => {
                                         ? "bg-green-100 text-green-700"
                                         : "bg-yellow-100 text-yellow-700"
                                     }
-                                        `}
-                            >
+                                        `}>
                                 {order.paymentStatus}
                             </span>
-
                         </td>
 
                         <td className="p-4">
@@ -128,43 +117,31 @@ const OrderTable = ({ orders, loading, onView }) => {
                                         ? "bg-green-100 text-green-700"
                                         : "bg-blue-100 text-blue-700"
                                     }
-                                        `}
-                            >
+                                        `}>
                                 {order.orderStatus}
                             </span>
 
                         </td>
 
                         <td className="p-4">
-
                             {order.shippingAddress}
-
                         </td>
 
                         <td className="p-4">
-
                             <div className="flex justify-center">
-
                                 <button
                                     onClick={() => onView(order)}
-                                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-                                >
+                                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
                                     View
                                 </button>
 
                             </div>
-
                         </td>
-
                     </tr>
                     )
                     })}
-
-
                 </tbody>
-
             </table>
-
         </div>
     );
 };
