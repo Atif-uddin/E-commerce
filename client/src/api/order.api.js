@@ -20,3 +20,13 @@ export const cancelOrder = async(orderId) =>{
     const response = await api.put(`/orders/${orderId}/cancel`)
     return response.data
 }
+
+export const getAllOrdersAdmin = async(params) =>{
+    const response = await api.get('/orders/admin/all',{params})
+    return response.data
+}
+
+export const updateOrderStatus = async(orderId, data) =>{
+    const response = await api.put(`/orders/admin/${orderId}/status`, data)
+    return response.data
+}
