@@ -28,7 +28,6 @@ const UserDetailsModal = ({
                 </div>
 
                 <div className="flex items-center gap-6 mb-8">
-
                     <img
                         src={
                             user.profileImage ||
@@ -39,7 +38,6 @@ const UserDetailsModal = ({
                     />
 
                     <div>
-
                         <h3 className="text-2xl font-bold">
                             {user.fullname}
                         </h3>
@@ -51,15 +49,11 @@ const UserDetailsModal = ({
                         <p className="text-gray-500">
                             {user.phoneNumber}
                         </p>
-
                     </div>
-
                 </div>
 
                 <div className="grid grid-cols-2 gap-6 mb-8">
-
                     <div>
-
                         <h4 className="font-semibold mb-2">
                             Role
                         </h4>
@@ -72,7 +66,6 @@ const UserDetailsModal = ({
                                 }`}>
                             {user.role}
                         </span>
-
                     </div>
 
                     <div>
@@ -92,11 +85,9 @@ const UserDetailsModal = ({
                                     : "Not Verified"
                             }
                         </span>
-
                     </div>
 
                     <div>
-
                         <h4 className="font-semibold mb-2">
                             Account Status
                         </h4>
@@ -120,11 +111,7 @@ const UserDetailsModal = ({
                         </h4>
 
                         <p>
-                            {
-                                new Date(
-                                    user.createdAt
-                                ).toLocaleDateString()
-                            }
+                            { new Date(user.createdAt).toLocaleDateString() }
                         </p>
 
                     </div>
@@ -142,7 +129,6 @@ const UserDetailsModal = ({
                         className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-lg">
                         Edit User
                     </button>
-
                 </div>
             </div>
         </div>

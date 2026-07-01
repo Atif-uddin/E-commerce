@@ -5,6 +5,7 @@ import { getAllProducts } from "../../api/product.api";
 import { getAllCategories } from "../../api/category.api";
 
 import ProductCard from "../../components/product/ProductCard";
+import Hero from "../../components/user/Hero";
 
 const Home = () => {
   const [products, setProducts] = useState([])
@@ -53,7 +54,7 @@ const Home = () => {
   return (
     <div className="p-5">
 
-      <div className="mb-6">
+      <div>
         <input
           type="text"
           placeholder="Search products..."
@@ -63,45 +64,98 @@ const Home = () => {
         />
       </div>
 
-      <h2 className="text-3xl font-bold mb-6">
-        Shop By Category
-      </h2>
+      <Hero />
 
-      <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-12">
+      <section className="py-2 bg-gray-50">
 
-        <div className="flex gap-6 overflow-x-auto pb-4">
+        <div className="max-w-7xl mx-auto px-4">
 
-          {
-            category.map(category => (
+          {/* Heading */}
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-900">
+              Shop By Category
+            </h2>
+
+            <p className="text-gray-500 mt-3 text-lg">
+              Explore our most popular collections
+            </p>
+          </div>
+
+          {/* Categories */}
+          <div className="flex gap-8 overflow-x-auto px-2 py-3 scrollbar-hide">
+
+            {category.map((category) => (
 
               <div
                 key={category._id}
-                onClick={() =>
-                  navigate(`/category/${category.slug}`)
-                }
-                className="flex flex-col items-center cursor-pointer min-w-90px">
+                onClick={() => navigate(`/category/${category.slug}`)}
+                className="
+                  group
+                  cursor-pointer
+                  text-center
+                "
+              >
 
-                <img
-                  src={
-                    category.images?.[0]?.url ||
-                    "https://placehold.co/100x100"
-                  }
-                  alt={category.name}
-                  className="w-20 h-20 rounded-full object-cover border-2 hover:scale-105 transition"
-                />
+                <div
+                  className="
+                    w-32
+                    h-32
+                    rounded-full
+                    bg-white
+                    shadow-md
+                    border
+                    overflow-hidden
+                    flex
+                    items-center
+                    justify-center
+                    transition-all
+                    duration-300
+                    group-hover:shadow-2xl
+                    group-hover:-translate-y-2
+                    group-hover:scale-105
+                  "
+                >
 
-                <span className="mt-2 text-sm font-medium text-center">
+                  <img
+                    src={
+                      category.images?.[0]?.url ||
+                      "https://placehold.co/120x120"
+                    }
+                    alt={category.name}
+                    className="
+                        w-full
+                        h-full
+                        object-cover
+                        transition-transform
+                        duration-500
+                        group-hover:scale-110
+                      "
+                  />
+
+                </div>
+
+                <h3
+                  className="
+                    mt-4
+                    font-semibold
+                    text-gray-800
+                    group-hover:text-blue-600
+                    transition
+                  "
+                >
                   {category.name}
-                </span>
+                </h3>
 
               </div>
 
-            ))
-          }
+            ))}
+
+          </div>
 
         </div>
 
-      </div>
+      </section>
+
       <h1 className="text-3xl font-bold mb-5">
         Products
       </h1>

@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { FaHeart } from "react-icons/fa";
+import { Heart } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
 import { getProductById } from "../../api/product.api";
 import { addToCart } from "../../api/cart.api";
-import { addToWishlist } from "../../api/wishlist.api";
 import { useWishlist } from "../../context/WishlistContext";
+import useWishlistHook from "../../hooks/useWishlist";
 
 const ProductDetails = () => {
 
@@ -17,7 +17,8 @@ const ProductDetails = () => {
     const [loading, setLoading] = useState(true);
     const [message, setMessage] = useState('')
     const navigate = useNavigate()
-    const {fetchWishlistCount} = useWishlist()
+    const { fetchWishlistCount } = useWishlist()
+    const {addToWishlistHandler, isWishlisted} = useWishlistHook()
 
     const { user } = useAuth()
 
@@ -80,26 +81,6 @@ const ProductDetails = () => {
         }
     }
 
-    const addToWishlistHandler = async () => {
-        try {
-            const response = await addToWishlist(product._id);
-            setMessage(response.message)
-            fetchWishlistCount()
-        } catch (error) {
-            console.log("FULL ERROR:", error);
-            console.log("STATUS:", error.response?.status);
-            console.log("DATA:", error.response?.data);
-            if (error.response?.status === 401) {
-                navigate("/login");
-                return;
-            }
-            setMessage(
-                error.response?.data?.message ||
-                "Something went wrong"
-            );
-        }
-    };
-
     return (
         <div className="max-w-6xl mx-auto p-5">
 
@@ -113,13 +94,25 @@ const ProductDetails = () => {
                     />
                 </div>
 
-                <div>
+                <div className="p-10">
+                    <button
+                        onClick={() => addToWishlistHandler(product._id)}
+                        className="top-4 right-4 bg-white/90 rounded-full p-2 shadow-md 
+                            hover:scale-110 transition-all duration-300 hover:text-white cursor-pointer">
+                        <Heart
+                            className={`w-5 h-5 ${isWishlisted
+                                    ? "text-red-500"
+                                    : "text-gray-500"
+                                }`}
+                            fill={isWishlisted ? "currentColor" : "none"}
+                        />
+                    </button>
 
-                    <h1 className="text-3xl font-bold">
+                    <h1 className="text-3xl mt-5 font-bold text-gray-900 group-hover:text-blue-600 transition">
                         {product.name}
                     </h1>
 
-                    <p className="text-gray-600 mt-2">
+                    <p className="text-sm text-gray-500 uppercase tracking-wide">
                         {product.brand}
                     </p>
 
@@ -131,25 +124,34 @@ const ProductDetails = () => {
                         Stock: {product.stock} left in stock
                     </p>
 
-                    <p className="mt-4">
-                        Rating: {product.rating}
-                    </p>
+                    <div className="flex items-center mt-4">
 
-                    <p className="mt-6">
+                        <span className="text-yellow-400 text-3xl">
+
+                            ★★★★★
+
+                        </span>
+
+                        <span className="ml-2 text-md text-gray-500">
+
+                            {product.rating || 4.8}
+
+                        </span>
+
+                    </div>
+
+                    <p className="mt-6 text-gray-500 text-sm line-clamp-2">
                         {product.description}
                     </p>
 
                     <button
                         onClick={addToCartHandler}
-                        className="mt-6 bg-blue-500 text-white px-5 py-3 rounded">
+                        className="px-5 w-full mt-6 py-3 rounded-xl bg-blue-600 
+                            hover:bg-blue-700 text-white font-semibold transition"
+                    >
                         Add To Cart
                     </button>
 
-                    <button
-                        onClick={addToWishlistHandler}
-                        className=" top-2 right-2 bg-white rounded-full p-2 shadow hover:scale-110 transition cursor-pointer">
-                        <FaHeart className="text-red-500" />
-                    </button>
 
                     {
                         message && (
@@ -163,7 +165,7 @@ const ProductDetails = () => {
 
             </div>
 
-        </div>
+        </div >
     );
 };
 

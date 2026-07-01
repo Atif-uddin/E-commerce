@@ -36,52 +36,52 @@ const AppRoutes = () => {
                 <Route path='/products/:productId' element={<ProductDetails />} />
                 <Route path='/category/:slug' element={<CategoryProducts />} />
 
+                {/* Protected Routes */}
+                <Route
+                    path="/cart"
+                    element={
+                        <ProtectedRoute>
+                            <Cart />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path='/checkout'
+                    element={
+                        <ProtectedRoute>
+                            <Checkout />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path='/orders'
+                    element={
+                        <ProtectedRoute>
+                            <Orders />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path='/orders/:orderId'
+                    element={
+                        <ProtectedRoute>
+                            <OrderDetails />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path='/wishlist'
+                    element={
+                        <ProtectedRoute>
+                            <Wishlist />
+                        </ProtectedRoute>
+                    }
+                />
             </Route>
-            {/* Protected Routes */}
-            <Route
-                path="/cart"
-                element={
-                    <ProtectedRoute>
-                        <Cart />
-                    </ProtectedRoute>
-                }
-            />
-
-            <Route
-                path='/checkout'
-                element={
-                    <ProtectedRoute>
-                        <Checkout />
-                    </ProtectedRoute>
-                }
-            />
-
-            <Route
-                path='/orders'
-                element={
-                    <ProtectedRoute>
-                        <Orders />
-                    </ProtectedRoute>
-                }
-            />
-
-            <Route
-                path='/orders/:orderId'
-                element={
-                    <ProtectedRoute>
-                        <OrderDetails />
-                    </ProtectedRoute>
-                }
-            />
-
-            <Route
-                path='/wishlist'
-                element={
-                    <ProtectedRoute>
-                        <Wishlist />
-                    </ProtectedRoute>
-                }
-            />
 
             <Route
                 path='/admin'
